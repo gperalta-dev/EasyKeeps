@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Easykeeps monthly report</title>
+<!--
+  Easykeeps one-page monthly client report.
+  Filled by render.mjs from a JSON file shaped like sample-data.json.
+  Every value lives in a data-field="path.to.value" element; derived numbers
+  (profit, net GST, set-aside) are computed in fill() so the source data only
+  holds ledger figures.
+-->
+<style>
+  @font-face { font-family: "Schibsted Grotesk"; src: url("assets/fonts/schibstedgrotesk-latin.woff2") format("woff2"); font-weight: 400 900; font-display: block; }
+  @font-face { font-family: "Figtree"; src: url("assets/fonts/figtree-latin.woff2") format("woff2"); font-weight: 300 900; font-display: block; }
+
+  :root {
+    --ink: #0E1C2B;
+    --ink-2: #3A4757;
+    --ink-3: #6B7685;
+    --line: #DCE3E8;
+    --paper: #FFFFFF;
+    --wash: #F3F7F5;
+    --green: #087A56;
+    --mint: #2FD08F;
+    --mint-wash: #E3F8EE;
+    --amber: #B4610B;
+    --amber-wash: #FDF1E3;
+    --head: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --body: "Figtree", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @page { size: Letter; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #E7ECEA; }
+  body { font-family: var(--body); color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .amt, .ca, .sv, .step, .tax .line b { font-variant-numeric: tabular-nums; }
+  @media print { html, body { background: var(--paper); } .page { margin: 0 !important; box-shadow: none !important; } }
+
+  .page {
+    width: 8.5in; height: 11in; margin: 24px auto; background: var(--paper);
+    box-shadow: 0 10px 40px rgba(14, 28, 43, .14);
+    display: flex; flex-direction: column; overflow: hidden; position: relative;
+  }
+
+  /* Header */
+  .top { background: var(--ink); color: #fff; padding: 22px 44px 20px; display: flex; justify-content: space-between; align-items: flex-end; position: relative; }
+  .top::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--green) 0 62%, var(--mint) 62% 100%); }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand svg { width: 30px; height: 30px; display: block; }
+  .wordmark { font-family: var(--head); font-weight: 800; font-size: 22px; letter-spacing: -.02em; line-height: 1; }
+  .motto { font-size: 11.5px; color: #A9B6C3; margin-top: 7px; letter-spacing: .01em; }
+  .meta { text-align: right; }
+  .meta .eyebrow { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--mint); font-weight: 700; }
+  .meta .biz { font-family: var(--head); font-size: 21px; font-weight: 700; margin-top: 5px; letter-spacing: -.01em; }
+  .meta .period { font-size: 12.5px; color: #C9D3DC; margin-top: 3px; }
+  .sample-flag { position: absolute; top: 12px; right: 44px; font-size: 9.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: var(--mint); padding: 3px 8px; border-radius: 3px; }
+  body:not(.is-sample) .sample-flag { display: none; }
+  body.is-sample .meta { margin-top: 18px; }
+
+  main { padding: 20px 44px 0; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .hello { font-family: var(--head); font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
+  .hello span { color: var(--ink-3); font-weight: 500; }
+
+  .label { font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; font-weight: 700; color: var(--ink-3); }
+  .big { font-family: var(--head); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; background: var(--paper); }
+
+  /* Row 1: profit + cash */
+  .row1 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; }
+  .profit { background: var(--wash); border-color: transparent; position: relative; overflow: hidden; }
+  .profit .big { font-size: 44px; margin-top: 8px; color: var(--ink); }
+  .delta { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; font-size: 13px; font-weight: 700; color: var(--green); background: var(--mint-wash); padding: 4px 9px; border-radius: 999px; }
+  .delta.down { color: var(--amber); background: var(--amber-wash); }
+  .delta svg { width: 11px; height: 11px; }
+  .delta.down svg { transform: rotate(180deg); }
+  .inout { margin-top: 13px; display: grid; gap: 7px; }
+  .bar-row { display: grid; grid-template-columns: 74px 1fr 76px; align-items: center; gap: 10px; font-size: 12.5px; }
+  .bar-row .name { color: var(--ink-2); font-weight: 600; }
+  .bar-row .amt { text-align: right; font-weight: 700; }
+  .track { height: 10px; border-radius: 99px; background: rgba(14, 28, 43, .07); overflow: hidden; }
+  .fill { height: 100%; border-radius: 99px; background: var(--green); }
+  .fill.out { background: var(--ink); opacity: .78; }
+  .costs { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #C7D2CD; }
+  .costs .label { margin-bottom: 7px; }
+  .cost { display: grid; grid-template-columns: 1fr 64px; gap: 10px; font-size: 12.5px; padding: 2.5px 0; align-items: center; }
+  .cost .cl { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
+  .cost .dot { width: 8px; height: 8px; border-radius: 2px; background: var(--green); flex: none; }
+  .cost:nth-child(3) .dot { background: #2BA97B; }
+  .cost:nth-child(4) .dot { background: var(--mint); }
+  .cost:nth-child(5) .dot { background: #B8C4BF; }
+  .cost .ca { text-align: right; font-weight: 600; }
+
+  .cash .big { font-size: 34px; margin-top: 8px; }
+  .cash .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
+  .steps { margin-top: 14px; display: grid; gap: 0; font-size: 12.5px; }
+  .step { display: grid; grid-template-columns: 1fr auto; padding: 6px 0; border-bottom: 1px solid #EDF1F3; }
+  .step:last-child { border-bottom: 0; }
+  .step .sv { font-weight: 700; }
+  .step.plus .sv { color: var(--green); }
+  .step.total { border-top: 2px solid var(--ink); border-bottom: 0; margin-top: 2px; padding-top: 8px; font-weight: 700; }
+
+  /* Row 2: owed + tax */
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .owed { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; }
+  .owed > div { padding: 16px 20px; }
+  .owed > div + div { border-left: 1px solid var(--line); }
+  .owed .big { font-size: 28px; margin-top: 8px; }
+  .owed .sub { font-size: 12.5px; color: var(--ink-2); margin-top: 7px; line-height: 1.4; }
+  .flag { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; white-space: nowrap; font-size: 11.5px; font-weight: 700; color: var(--amber); background: var(--amber-wash); padding: 3px 8px; border-radius: 6px; }
+  .flag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .flag.calm { color: var(--green); background: var(--mint-wash); }
+  .owed .head-row { display: flex; align-items: center; gap: 7px; }
+  .owed .head-row svg { width: 15px; height: 15px; color: var(--green); }
+
+  .tax { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .tax .label { color: var(--mint); }
+  .tax-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .tax .big { font-size: 30px; margin-top: 8px; }
+  .tax .lines { margin-top: 12px; display: grid; gap: 6px; font-size: 12.5px; }
+  .tax .line { display: grid; grid-template-columns: 1fr auto; gap: 8px; color: #C9D3DC; }
+  .tax .line b { color: #fff; font-weight: 700; }
+  .tax .line small { display: block; font-size: 11px; color: #8D9BAA; margin-top: 1px; }
+  .tax .note { margin-top: 10px; font-size: 10.5px; color: #8D9BAA; line-height: 1.4; }
+
+  /* Noticed */
+  .noticed-head { display: flex; align-items: baseline; justify-content: space-between; }
+  .noticed { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 9px; }
+  .note-item { border-top: 3px solid var(--green); padding-top: 10px; }
+  .note-item .n { font-family: var(--head); font-weight: 800; font-size: 13px; color: var(--green); }
+  .note-item h3 { font-family: var(--head); font-size: 14.5px; font-weight: 700; line-height: 1.25; margin-top: 3px; letter-spacing: -.005em; }
+  .note-item p { font-size: 12.5px; line-height: 1.4; color: var(--ink-2); margin-top: 5px; }
+
+  /* Next step */
+  .next { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; background: var(--mint-wash); border: 1.5px solid var(--mint); border-radius: 12px; padding: 15px 20px; }
+  .next .arrow { width: 38px; height: 38px; border-radius: 50%; background: var(--green); display: grid; place-items: center; }
+  .next .arrow svg { width: 18px; height: 18px; }
+  .next .label { color: var(--green); }
+  .next .txt { font-family: var(--head); font-size: 16px; font-weight: 700; margin-top: 3px; line-height: 1.3; letter-spacing: -.01em; }
+  .next .by { text-align: right; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .next .by b { display: block; font-family: var(--head); font-size: 15px; color: var(--ink); }
+
+  /* Sign-off + footer */
+  .signoff { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 12px 0 0; border-top: 1px solid var(--line); margin-top: auto; }
+  .seal { width: 40px; height: 40px; }
+  .signoff .who { font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+  .signoff .who b { color: var(--ink); font-size: 14px; font-family: var(--head); }
+  .signoff .when { text-align: right; font-size: 12px; color: var(--ink-3); }
+  .signoff .when b { display: block; color: var(--ink); font-size: 13px; }
+
+  footer { padding: 10px 44px 18px; font-size: 9.5px; line-height: 1.5; color: var(--ink-3); display: flex; justify-content: space-between; gap: 24px; }
+  footer .legal { max-width: 5.4in; }
+  footer .contact { text-align: right; white-space: nowrap; color: var(--ink-2); font-weight: 600; }
+  .pending { background: #FFF3C4; outline: 1px dashed var(--amber); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <span class="sample-flag">Sample report, fictional numbers</span>
+    <div>
+      <div class="brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#087A56"/>
+          <path d="M8 12.5h16M8 19.5h16" stroke="#2FD08F" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="12" cy="12.5" r="3" fill="#fff"/><circle cx="20" cy="19.5" r="3" fill="#fff"/>
+        </svg>
+        <span class="wordmark">easykeeps</span>
+      </div>
+      <div class="motto">Balance on easy.</div>
+    </div>
+    <div class="meta">
+      <div class="eyebrow">Your monthly report</div>
+      <div class="biz" data-field="client.business_name"></div>
+      <div class="period"><span data-field="period.label"></span> · issued <span data-field="period.issued_on"></span></div>
+    </div>
+  </header>
+
+  <main>
+    <p class="hello">Hi <span data-field="client.owner_first_name" style="color:inherit;font-weight:inherit"></span>. <span>Here is your <span data-field="period.label"></span> on one page.</span></p>
+
+    <section class="row1">
+      <div class="card profit">
+        <div class="label">Profit this month</div>
+        <div class="big" data-field="calc.profit" data-format="money0"></div>
+        <div class="delta" data-delta><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5 10.5 7H7.5v3.5h-3V7h-3z" fill="currentColor"/></svg><span data-field="calc.profit_change_text"></span></div>
+        <div class="inout">
+          <div class="bar-row"><span class="name">Money in</span><div class="track"><div class="fill" data-bar="profit.money_in"></div></div><span class="amt" data-field="profit.money_in" data-format="money0"></span></div>
+          <div class="bar-row"><span class="name">Money out</span><div class="track"><div class="fill out" data-bar="profit.money_out"></div></div><span class="amt" data-field="profit.money_out" data-format="money0"></span></div>
+        </div>
+        <div class="costs">
+          <div class="label">Where the money went</div>
+          <div data-list="profit.top_costs">
+            <template><div class="cost"><span class="cl"><span class="dot"></span><span data-field="label"></span></span><span class="ca" data-field="amount" data-format="money0"></span></div></template>
+          </div>
+        </div>
+      </div>
+
+      <div class="card cash">
+        <div class="label">Cash in the bank</div>
+        <div class="big" data-field="cash.closing" data-format="money0"></div>
+        <div class="sub">Matched to your bank statement</div>
+        <div class="steps">
+          <div class="step"><span>You started the month with</span><span class="sv" data-field="cash.opening" data-format="money0"></span></div>
+          <div class="step plus"><span>Customers paid you</span><span class="sv" data-field="cash.received" data-format="plus0"></span></div>
+          <div class="step"><span>You paid bills and costs</span><span class="sv" data-field="cash.paid_out" data-format="minus0"></span></div>
+          <div class="step"><span>You paid yourself</span><span class="sv" data-field="cash.owner_draw" data-format="minus0"></span></div>
+          <div class="step total"><span>You ended with</span><span data-field="cash.closing" data-format="money0"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row2">
+      <div class="card owed">
+        <div>
+          <div class="head-row"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 8 8)"/></svg><span class="label">Owed to you</span></div>
+          <div class="big" data-field="owed.to_you" data-format="money0"></div>
+          <div class="sub" data-field="calc.to_you_text"></div>
+          <div class="flag" data-field="calc.to_you_flag" data-late></div>
+        </div>
+        <div>
+          <div class="head-row"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="label">You owe</span></div>
+          <div class="big" data-field="owed.by_you" data-format="money0"></div>
+          <div class="sub" data-field="calc.by_you_text"></div>
+          <div class="flag" data-field="calc.by_you_flag" data-calm></div>
+        </div>
+      </div>
+
+      <div class="card tax">
+        <div class="tax-top"><span class="label">Put this aside for tax</span></div>
+        <div class="big" data-field="calc.set_aside_total" data-format="money"></div>
+        <div class="lines">
+          <div class="line"><span>GST to set aside<small>You charged <span data-field="tax.gst_collected" data-format="money"></span>, minus <span data-field="tax.gst_paid" data-format="money"></span> you paid on costs</small></span><b data-field="calc.gst_net" data-format="money"></b></div>
+          <div class="line"><span>Income tax savings<small><span data-field="calc.rate_pct"></span> of profit, the rate you picked</small></span><b data-field="calc.income_set_aside" data-format="money"></b></div>
+        </div>
+        <div class="note" data-field="tax.gst_period_note"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="noticed-head"><span class="label">What we noticed</span></div>
+      <div class="noticed" data-list="noticed">
+        <template><div class="note-item"><div class="n" data-field="$n"></div><h3 data-field="title"></h3><p data-field="body"></p></div></template>
+      </div>
+    </section>
+
+    <section class="next">
+      <div class="arrow"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3.5 9h10M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><div class="label">Your one next step</div><div class="txt" data-field="next_step.text"></div></div>
+      <div class="by">Please by<b data-field="next_step.by"></b></div>
+    </section>
+
+    <section class="signoff">
+      <svg class="seal" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18.5" fill="none" stroke="#087A56" stroke-width="1.5"/>
+        <circle cx="20" cy="20" r="14" fill="#E3F8EE"/>
+        <path d="m13.5 20.5 4.2 4.2 8.8-9.2" fill="none" stroke="#087A56" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="who">Reviewed and approved by <b data-field="review.reviewer_name"></b><br><span data-field="review.reviewer_role"></span>. Questions? Just reply to the email this came with.</div>
+      <div class="when">Approved on<b data-field="review.approved_on"></b></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="legal">Easykeeps provides bookkeeping by an accounting student and is not a CPA firm. This report is prepared from your records and bank statements for your own use. It is not an audit, review or compilation, and it is not tax advice. The income tax savings line uses a rate you chose.</div>
+    <div class="contact">hello@easykeeps.ca<br>easykeeps.ca</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const errors = [];
+  const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+  const cad = (n, d) => '$' + Math.abs(n).toLocaleString('en-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const fmt = {
+    text: v => String(v),
+    money: v => (v < 0 ? '−' : '') + cad(v, 2),
+    money0: v => (v < 0 ? '−' : '') + cad(Math.round(v), 0),
+    plus0: v => '+' + cad(Math.round(v), 0),
+    minus0: v => '−' + cad(Math.round(v), 0)
+  };
+  const r2 = n => Math.round(n * 100) / 100;
+
+  function derive(d) {
+    const profit = r2(d.profit.money_in - d.profit.money_out);
+    const change = r2(profit - d.profit.previous_profit);
+    const gstNet = r2(d.tax.gst_collected - d.tax.gst_paid);
+    const income = r2(Math.max(profit, 0) * d.tax.income_set_aside_rate);
+    const o = d.owed;
+    const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
+    const cashCheck = r2(d.cash.opening + d.cash.received - d.cash.paid_out - d.cash.owner_draw);
+    if (cashCheck !== r2(d.cash.closing)) errors.push('Cash does not balance: opening + in - out - draw = ' + cashCheck + ', closing is ' + d.cash.closing);
+    return {
+      profit,
+      profit_change_text: (change >= 0 ? 'Up ' : 'Down ') + fmt.money0(Math.abs(change)) + ' from ' + d.period.previous_label,
+      profit_change: change,
+      gst_net: gstNet,
+      income_set_aside: income,
+      set_aside_total: r2(gstNet + income),
+      rate_pct: Math.round(d.tax.income_set_aside_rate * 100) + '%',
+      to_you_text: plural(o.to_you_count, 'unpaid invoice') + ' from your customers',
+      to_you_flag: o.to_you_late_count ? fmt.money0(o.to_you_late) + ' over 30 days late' : '',
+      by_you_flag: o.by_you_overdue ? fmt.money0(o.by_you_overdue) + ' is overdue' : 'Nothing overdue',
+      by_you_text: plural(o.by_you_count, 'bill') + (o.by_you_next_due ? ', next one due ' + o.by_you_next_due : '')
+    };
+  }
+
+  function bind(root, data, n) {
+    root.querySelectorAll('[data-field]').forEach(el => {
+      if (el.closest('template') || el.dataset.bound) return;
+      el.dataset.bound = '1';
+      const path = el.dataset.field;
+      const v = path === '$n' ? String(n).padStart(2, '0') : get(data, path);
+      if (v === undefined || v === null || v === '') {
+        if (el.hasAttribute('data-late')) { el.remove(); return; }
+        errors.push('Missing value: ' + path);
+        el.textContent = '[' + path + ']';
+        el.classList.add('pending');
+        return;
+      }
+      el.textContent = (fmt[el.dataset.format] || fmt.text)(v);
+      if (typeof v === 'string' && /^\[[A-Z ]+\]$/.test(v)) el.classList.add('pending');
+    });
+  }
+
+  function fill(d) {
+    d.calc = derive(d);
+    document.body.classList.toggle('is-sample', !!d.sample);
+    document.querySelectorAll('[data-list]').forEach(box => {
+      const items = get(d, box.dataset.list) || [];
+      const tpl = box.querySelector('template');
+      items.forEach((item, i) => {
+        const frag = tpl.content.cloneNode(true);
+        const wrap = document.createElement('div');
+        wrap.appendChild(frag);
+        bind(wrap, item, i + 1);
+        while (wrap.firstChild) box.appendChild(wrap.firstChild);
+      });
+    });
+    bind(document, d);
+    const max = Math.max(d.profit.money_in, d.profit.money_out);
+    document.querySelectorAll('[data-bar]').forEach(el => { el.style.width = (100 * get(d, el.dataset.bar) / max).toFixed(1) + '%'; });
+    if (d.calc.profit_change < 0) document.querySelector('[data-delta]').classList.add('down');
+    if (!d.owed.by_you_overdue) document.querySelector('[data-calm]').classList.add('calm');
+  }
+
+  if (window.REPORT_DATA) fill(window.REPORT_DATA);
+  window.REPORT_ERRORS = errors;
+  document.fonts.ready.then(() => {
+    const page = document.querySelector('.page');
+    if (page.scrollHeight > page.clientHeight + 1) errors.push('Content overflows one page by ' + (page.scrollHeight - page.clientHeight) + 'px');
+    document.body.dataset.ready = '1';
+  });
+})();
+</script>
+</body>
+</html>

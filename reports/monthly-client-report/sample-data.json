@@ -1,0 +1,70 @@
+{
+  "_note": "SAMPLE DATA. Fictional business and numbers for layout only.",
+  "sample": true,
+  "client": {
+    "business_name": "Bright Corner Cleaning",
+    "owner_first_name": "Sam"
+  },
+  "period": {
+    "label": "September 2026",
+    "previous_label": "August",
+    "issued_on": "October 16, 2026"
+  },
+  "profit": {
+    "money_in": 8450.00,
+    "money_out": 3215.00,
+    "previous_profit": 4780.00,
+    "top_costs": [
+      { "label": "Helper (subcontractor)", "amount": 1200.00 },
+      { "label": "Fuel and vehicle", "amount": 910.00 },
+      { "label": "Cleaning supplies", "amount": 640.00 },
+      { "label": "Everything else", "amount": 465.00 }
+    ]
+  },
+  "cash": {
+    "opening": 12380.00,
+    "received": 8120.00,
+    "paid_out": 3410.00,
+    "owner_draw": 2500.00,
+    "closing": 14590.00
+  },
+  "owed": {
+    "to_you": 1960.00,
+    "to_you_count": 3,
+    "to_you_late": 640.00,
+    "to_you_late_count": 1,
+    "by_you": 420.00,
+    "by_you_count": 1,
+    "by_you_overdue": 0,
+    "by_you_next_due": "October 15"
+  },
+  "tax": {
+    "gst_collected": 422.50,
+    "gst_paid": 150.25,
+    "gst_period_note": "Filed yearly. Next GST return covers January to December 2026.",
+    "income_set_aside_rate": 0.20
+  },
+  "noticed": [
+    {
+      "title": "One invoice is over 30 days late",
+      "body": "$640 from Aug 28 is still unpaid. A short, friendly reminder usually does it. We can send one for you."
+    },
+    {
+      "title": "Fuel was up 38% from August",
+      "body": "$910 this month against $660 last month. If you added a regular client further out, that explains it."
+    },
+    {
+      "title": "Two receipts are missing",
+      "body": "Costco on Sep 9 ($184.20) and Sep 23 ($96.40). Until they arrive, the GST you paid on them stays off your books."
+    }
+  ],
+  "next_step": {
+    "text": "Snap the two Costco receipts and send them to your receipts email.",
+    "by": "October 25"
+  },
+  "review": {
+    "reviewer_name": "[REVIEW LEAD NAME]",
+    "reviewer_role": "Review lead, Easykeeps",
+    "approved_on": "October 16, 2026"
+  }
+}
