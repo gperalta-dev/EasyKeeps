@@ -1159,3 +1159,90 @@ html.a11y-still .scroll-progress { display: none; }
   .hero__wall { transition: none; }
 }
 html.a11y-still .hero__wall { transition: none; }
+
+/* ---------- Phones get the motion too: looping scenes, living backdrops ---------- */
+/* How it works, scene 1: focus, scan, flash, screenshot thumbnail, sent. Loops while on screen. */
+.frame-corners { position: absolute; inset: 0; }
+.phone__shot {
+  position: absolute; inset: 12px; border-radius: 30px; overflow: hidden; opacity: 0; pointer-events: none; transform-origin: 0 100%;
+  background: radial-gradient(80% 60% at 50% 40%, #6F7A62, #2C3428); box-shadow: 0 0 0 3px #fff, 0 12px 28px rgba(0, 0, 0, .45);
+}
+.phone__shot i {
+  position: absolute; left: 50%; top: 50%; width: 60%; height: 64%; transform: translate(-50%, -50%) rotate(-4deg); background-color: #FBFAF6;
+  background-image: linear-gradient(#2A2A2A, #2A2A2A), repeating-linear-gradient(180deg, transparent 0 9%, rgba(0, 0, 0, .28) 9% 12%);
+  background-size: 50% 5%, 78% 66%; background-position: 50% 10%, 50% 70%; background-repeat: no-repeat;
+}
+.scene--snap.is-active .frame-corners { animation: focus-lock 7.2s var(--ease) infinite; }
+.scene--snap.is-active .scanline { animation: scan-loop 7.2s var(--ease) infinite; }
+.scene--snap.is-active .phone__shutter { animation: flash-loop 7.2s ease-out infinite; }
+.scene--snap.is-active .phone__shot { animation: shot-loop 7.2s var(--ease) infinite; }
+.scene--snap.is-active .toast { animation: toast-loop 7.2s var(--ease) infinite; }
+.scene--snap.is-active .receipt { animation: handheld 7.2s ease-in-out infinite; }
+@keyframes focus-lock { 0% { opacity: 0; transform: scale(1.14); } 9%, 40% { opacity: .9; transform: none; } 43% { transform: scale(.95); } 48%, 100% { opacity: .9; transform: none; } }
+@keyframes scan-loop { 0%, 8% { opacity: 0; top: 14%; } 12% { opacity: 1; } 36% { opacity: 1; top: 84%; } 39%, 100% { opacity: 0; top: 84%; } }
+@keyframes flash-loop { 0%, 40% { opacity: 0; } 42% { opacity: .9; } 50%, 100% { opacity: 0; } }
+@keyframes shot-loop {
+  0%, 41% { opacity: 0; transform: none; }
+  42%, 46% { opacity: 1; transform: none; }
+  54%, 70% { opacity: 1; transform: translate(7%, -5%) scale(.34); }
+  77%, 100% { opacity: 0; transform: translate(7%, -40%) scale(.2); }
+}
+@keyframes toast-loop { 0%, 70% { opacity: 0; transform: translate(-50%, 20px); } 76%, 94% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -6px); } }
+@keyframes handheld { 0%, 100% { transform: rotate(-4deg); } 20% { transform: translate(2px, -3px) rotate(-3.2deg); } 38%, 50% { transform: rotate(-4deg); } 72% { transform: translate(-2px, 2px) rotate(-4.7deg); } }
+
+/* Scene 2: a new receipt keeps arriving in the ledger */
+.scene--ledger.is-active .ledger__row--new { animation: row-new-loop 6s var(--ease) infinite; }
+.scene--ledger.is-active .ledger__row--new .chip { animation: pop-loop 6s var(--ease) infinite; }
+.scene--ledger.is-active .ledger__row--new .ok { animation: pop-loop-late 6s var(--ease) infinite; }
+.scene--ledger.is-active .ledger__count { animation: count-bump 6s var(--ease) infinite; }
+@keyframes row-new-loop { 0% { opacity: 0; transform: translateX(-40px) rotate(-2deg); } 12%, 90% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; transform: translateY(-4px); } }
+@keyframes pop-loop { 0%, 12% { opacity: 0; transform: scale(.6); } 20%, 100% { opacity: 1; transform: none; } }
+@keyframes pop-loop-late { 0%, 17% { opacity: 0; transform: scale(.6); } 25%, 100% { opacity: 1; transform: none; } }
+@keyframes count-bump { 0%, 11% { transform: none; } 15% { transform: scale(1.14); } 21%, 100% { transform: none; } }
+
+/* Scene 3: the report's bars keep breathing and the Approved badge catches the light */
+.scene--report.is-active .bars span { animation: grow .9s var(--ease) both, bar-breathe 2.6s 1.2s ease-in-out infinite alternate; }
+.scene--report.is-active .bars:nth-child(2) span { animation-delay: .1s, 1.5s; }
+.scene--report.is-active .bars:nth-child(3) span { animation-delay: .2s, 1.8s; }
+@keyframes bar-breathe { to { transform: scaleY(.86); } }
+.approved { position: relative; overflow: hidden; }
+.scene--report.is-active .approved::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .4) 50%, transparent 70%); animation: badge-shine 3.4s 2.4s ease-in-out infinite;
+}
+@keyframes badge-shine { 0% { transform: translateX(-120%); } 45%, 100% { transform: translateX(120%); } }
+
+/* The stage behind the scenes: two soft lights drift slowly */
+.stage::after {
+  content: ""; position: absolute; inset: -40%; z-index: -2; pointer-events: none;
+  background: radial-gradient(20% 20% at 36% 40%, rgba(47, 208, 143, .24), transparent 70%), radial-gradient(18% 18% at 64% 62%, rgba(36, 87, 245, .26), transparent 70%);
+  animation: stage-glow 14s ease-in-out infinite alternate;
+}
+@keyframes stage-glow { from { transform: translate(-7%, 5%) rotate(0deg); } to { transform: translate(7%, -6%) rotate(45deg); } }
+.how.is-off .stage *, .how.is-off .stage::after, .how.is-off .stage *::after { animation-play-state: paused; }
+
+/* Photo story: the photo behind slowly pushes in while it is showing */
+.story__bg.is-on { animation: push-in 16s ease-in-out infinite alternate; }
+@keyframes push-in { from { scale: 1; translate: 0 0; } to { scale: 1.07; translate: -1.2% -1%; } }
+
+@media (max-width: 767px) {
+  .phone__shot { inset: 10px; border-radius: 26px; }
+  /* No pointer to lean the hero wall on phones, so its columns travel faster */
+  .wcol--up .wcol__inner { animation-duration: 40s; }
+  .wcol--down .wcol__inner { animation-duration: 48s; }
+  .wcol--3 .wcol__inner { animation-duration: 34s; }
+}
+
+/* Still mode: every loop above settles on a calm, complete frame */
+@media (prefers-reduced-motion: reduce) {
+  .scene--snap .phone__shot, .scene--snap .phone__shutter, .scene--snap .scanline, .stage::after, .scene--report .approved::after { animation: none !important; opacity: 0; }
+  .scene--snap .toast { animation: none !important; opacity: 1; transform: translate(-50%, 0); }
+  .scene--snap .frame-corners, .scene--snap .receipt, .ledger__count { animation: none !important; }
+  .scene--ledger .ledger__row--new, .scene--ledger .ledger__row--new .chip, .scene--ledger .ledger__row--new .ok { animation: none !important; opacity: 1; transform: none; }
+  .story__bg.is-on { animation: none; }
+}
+html.a11y-still .scene--snap .phone__shot, html.a11y-still .scene--snap .phone__shutter, html.a11y-still .scene--snap .scanline, html.a11y-still .stage::after, html.a11y-still .scene--report .approved::after { animation: none !important; opacity: 0; }
+html.a11y-still .scene--snap .toast { animation: none !important; opacity: 1; transform: translate(-50%, 0); }
+html.a11y-still .scene--snap .frame-corners, html.a11y-still .scene--snap .receipt, html.a11y-still .ledger__count { animation: none !important; }
+html.a11y-still .scene--ledger .ledger__row--new, html.a11y-still .scene--ledger .ledger__row--new .chip, html.a11y-still .scene--ledger .ledger__row--new .ok { animation: none !important; opacity: 1; transform: none; }
+html.a11y-still .story__bg.is-on { animation: none; }
