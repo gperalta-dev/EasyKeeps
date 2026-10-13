@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Easykeeps palette and type proposal</title>
+<style>
+@font-face{font-family:"Schibsted Grotesk";src:url(../landing/assets/fonts/schibstedgrotesk-latin.woff2) format("woff2");font-weight:400 900;font-display:swap}
+@font-face{font-family:"Figtree";src:url(../landing/assets/fonts/figtree-latin.woff2) format("woff2");font-weight:300 900;font-display:swap}
+:root{--ink:#0E1C2B;--paper:#F5F7F6;--card:#FDFEFE;--muted:#4A5A68;--green:#087A56;--mint:#2FD08F;--cobalt:#2457F5;--amber:#F2A516;--amber-t:#9A5B00;--coral:#EF5A3C;--coral-t:#C2391C;--line:#DDE3E1}
+*{box-sizing:border-box;margin:0}
+body{background:var(--paper);color:var(--ink);font:17px/1.55 Figtree,sans-serif;padding:56px 64px;width:1280px}
+h1{font:800 64px/1.02 "Schibsted Grotesk";letter-spacing:-.03em;max-width:15ch}
+h1 em{font-style:normal;color:var(--green)}
+.sub{color:var(--muted);font-size:20px;margin:18px 0 26px;max-width:46ch}
+.row{display:flex;gap:14px;align-items:center}
+.btn{font:700 17px Figtree;padding:15px 26px;border-radius:999px;border:0}
+.p{background:var(--green);color:#fff}
+.s{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;margin-top:8px}
+.sw{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+.c{border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.c i{display:block;height:92px}
+.c div{padding:10px 12px;font-size:14px;line-height:1.35}
+.c b{display:block;font-size:15px}
+.c code{font:600 13px ui-monospace,monospace;color:var(--muted)}
+.tier{background:var(--ink);color:#EAF2EE;border-radius:20px;padding:26px;position:relative;overflow:hidden}
+.tier h3{font:700 26px "Schibsted Grotesk";display:flex;justify-content:space-between;align-items:center}
+.tag{font:700 13px Figtree;background:var(--mint);color:var(--ink);padding:5px 11px;border-radius:999px}
+.price{font:800 54px/1 "Schibsted Grotesk";margin:16px 0 4px;font-variant-numeric:tabular-nums}
+.price small{font:500 16px Figtree;color:#A9BBC0}
+.feat{list-style:none;padding:0;margin-top:18px;display:grid;gap:9px;font-size:15.5px}
+.feat li{display:flex;gap:10px;align-items:center}
+.feat span{width:9px;height:9px;border-radius:3px;flex:none}
+.ledger{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;font-size:15px}
+.ledger .l{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line)}
+.ledger .l:last-child{border:0}
+.pill{font:700 12px Figtree;padding:3px 9px;border-radius:999px}
+.type{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+.type>div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.big{font:800 44px/1 "Schibsted Grotesk";letter-spacing:-.02em}
+.body{font:400 40px/1 Figtree}
+.meta{color:var(--muted);font-size:14px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="grid">
+ <div>
+  <h1>Your books, done every month. <em>Balance on easy.</em></h1>
+  <p class="sub">Snap your receipts. We sort, match and check everything, and a real person signs off before you see it.</p>
+  <div class="row"><button class="btn p">Get started</button><button class="btn s">Talk to us</button></div>
+  <div class="ledger">
+   <div class="l"><span>Home Depot receipt</span><span class="pill" style="background:#E3F8EE;color:var(--green)">Supplies, matched</span></div>
+   <div class="l"><span>Shell fuel</span><span class="pill" style="background:#FDF1D8;color:var(--amber-t)">GST set aside</span></div>
+   <div class="l"><span>E-transfer, unknown</span><span class="pill" style="background:#FDE6E1;color:var(--coral-t)">Flagged for review</span></div>
+   <div class="l"><span>September report</span><span class="pill" style="background:#E5ECFE;color:var(--cobalt)">Ready to read</span></div>
+  </div>
+ </div>
+ <div>
+  <div class="tier">
+   <h3>Established <span class="tag">Most complete</span></h3>
+   <div class="price">$850 <small>/ month, from</small></div>
+   <div style="color:#A9BBC0;font-size:14px">Provisional price</div>
+   <ul class="feat">
+    <li><span style="background:var(--mint)"></span>Up to 250 transactions a month</li>
+    <li><span style="background:var(--cobalt)"></span>Plain-language monthly report</li>
+    <li><span style="background:var(--amber)"></span>GST tracked and set aside</li>
+    <li><span style="background:var(--coral)"></span>Every flagged item checked by a person</li>
+   </ul>
+  </div>
+ </div>
+</div>
+<div class="sw">
+ <div class="c"><i style="background:var(--ink)"></i><div><b>Ink</b><code>#0E1C2B</code><br>Text, premium tier, footer</div></div>
+ <div class="c"><i style="background:var(--paper)"></i><div><b>Paper</b><code>#F5F7F6</code><br>Page background (cool, not cream)</div></div>
+ <div class="c"><i style="background:var(--green)"></i><div><b>Ledger green</b><code>#087A56</code><br>Primary action, links. White text 5.4:1</div></div>
+ <div class="c"><i style="background:var(--mint)"></i><div><b>Fresh mint</b><code>#2FD08F</code><br>Highlights, charts, motion. On ink 8.6:1</div></div>
+ <div class="c"><i style="background:var(--cobalt)"></i><div><b>Report blue</b><code>#2457F5</code><br>Reports and calls</div></div>
+ <div class="c"><i style="background:var(--amber)"></i><div><b>Tax amber</b><code>#F2A516</code> / text <code>#9A5B00</code><br>GST and tax set aside</div></div>
+ <div class="c"><i style="background:var(--coral)"></i><div><b>Review coral</b><code>#EF5A3C</code> / text <code>#C2391C</code><br>Flagged items, human review</div></div>
+ <div class="c"><i style="background:var(--muted)"></i><div><b>Slate</b><code>#4A5A68</code><br>Secondary text. On paper 6.6:1</div></div>
+</div>
+<div class="type">
+ <div><div class="big">Schibsted Grotesk</div><div class="meta">Headlines and prices. Sturdy, newspaper-grade grotesk: reads as serious money without feeling corporate.</div></div>
+ <div><div class="body">Figtree</div><div class="meta">Body, buttons, forms. Open shapes and a tall x-height, so 16 to 18px stays easy to read on a phone.</div></div>
+</div>
+</body>
+</html>

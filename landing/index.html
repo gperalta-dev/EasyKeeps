@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Easykeeps | Bookkeeping for Edmonton small businesses</title>
+<meta name="description" content="Easykeeps does your bookkeeping every month. Snap your receipts, we sort and match them, and a real person checks your month before you see it. Edmonton, Alberta.">
+<meta name="theme-color" content="#0E1C2B">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/schibstedgrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="assets/img/hero-owner-with-receipts.jpg" media="(min-width: 768px)">
+<link rel="preload" as="image" href="assets/img/hero-owner-with-receipts-mobile.jpg" media="(max-width: 767px)">
+<link rel="stylesheet" href="styles.css">
+<script defer src="main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" data-nav>
+  <div class="nav__inner wrap">
+    <a class="brand" href="#top" aria-label="Easykeeps home">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#087A56"/><rect class="bar bar--top" x="8" y="10" width="11" height="4" rx="2" fill="#2FD08F"/><rect class="bar bar--bottom" x="8" y="18" width="16" height="4" rx="2" fill="#FDFEFE"/></svg>
+      <span class="brand__word" translate="no">Easykeeps</span>
+    </a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--ghost btn--sm nav__talk" href="#talk">Talk to us</a>
+      <a class="btn btn--primary btn--sm" href="#start">Get started</a>
+      <button class="nav__menu" type="button" aria-expanded="false" aria-controls="sheet" data-menu-open>
+        <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="sr-only">Open menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu sheet (phones only) -->
+<div class="sheet" id="sheet" hidden data-sheet>
+  <div class="sheet__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="sheet__top">
+      <span class="brand__word" translate="no">Easykeeps</span>
+      <button class="sheet__close" type="button" data-menu-close>
+        <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="sr-only">Close menu</span>
+      </button>
+    </div>
+    <nav class="sheet__links" aria-label="Mobile">
+      <a href="#how" data-menu-link>How it works</a>
+      <a href="#pricing" data-menu-link>Pricing</a>
+      <a href="#reviews" data-menu-link>Reviews</a>
+      <a href="#faq" data-menu-link>FAQ</a>
+    </nav>
+    <div class="sheet__cta">
+      <a class="btn btn--primary btn--block" href="#start" data-menu-link>Get started</a>
+      <a class="btn btn--outline btn--block" href="#talk" data-menu-link>Talk to us</a>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- 1. HERO -->
+<section class="hero" id="top" aria-labelledby="hero-title" data-hero>
+  <picture class="hero__media">
+    <source media="(max-width: 767px)" srcset="assets/img/hero-owner-with-receipts-mobile.jpg">
+    <img src="assets/img/hero-owner-with-receipts.jpg" alt="An Edmonton business owner photographing receipts with their phone" width="2400" height="1500" fetchpriority="high">
+  </picture>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__inner wrap">
+    <div class="hero__copy">
+      <!-- Mobile-only animated status chip (separate mobile component) -->
+      <div class="hero-chip" aria-hidden="true" data-cycle>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 3h12v18l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3L6 21z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M9 8h6M9 11.5h6M9 15h3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+        <span class="hero-chip__text" data-cycle-text>Receipt sorted: Supplies</span>
+      </div>
+
+      <p class="eyebrow eyebrow--light">Bookkeeping for Edmonton businesses</p>
+      <h1 id="hero-title" class="hero__title">Your books, done <span>every month.</span></h1>
+      <p class="hero__sub">Snap your receipts. We sort and match them, and a real person checks your month before you see it.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--primary btn--lg" href="#start">Get started <svg class="btn__arrow" width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn--outline-light btn--lg" href="#talk">Talk to us</a>
+      </div>
+      <!-- Rating line: hidden until Easykeeps has real Google reviews. Fill in, then remove the hidden attribute. -->
+      <a class="hero__rating" href="#reviews" hidden>
+        <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>[RATING] from [N] Google reviews</span>
+      </a>
+    </div>
+
+    <!-- Desktop floating receipt card (example data). Responds on hover. -->
+    <div class="hero-card" aria-hidden="true" data-hero-card>
+      <div class="hero-card__back">
+        <span class="dot-square dot-square--blue"></span>
+        <span><strong>September report</strong> ready to read</span>
+      </div>
+      <div class="hero-card__front">
+        <div class="hero-card__head">
+          <span class="hero-card__icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 3h12v18l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3L6 21z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M9 8h6M9 11.5h6M9 15h3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+          <span><strong>New receipt</strong><small>Example</small></span>
+          <span class="hero-card__amt">$86.40</span>
+        </div>
+        <div class="hero-card__vendor">Home Depot, Oct 9</div>
+        <ol class="hero-card__steps" data-hero-steps>
+          <li class="is-done" data-step="0"><span class="tick tick--green"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Sorted as <b class="t-green">Supplies</b></li>
+          <li data-step="1"><span class="tick tick--green"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Matched to your bank</li>
+          <li data-step="2"><span class="tick tick--amber"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b class="t-amber">$4.11 GST</b> set aside</li>
+          <li data-step="3"><span class="tick tick--coral"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Checked by a person</li>
+        </ol>
+        <div class="hero-card__bar"><span data-hero-progress></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. TRUST BAR -->
+<section class="trust" id="trust" aria-label="Why owners trust us">
+  <div class="wrap">
+    <ul class="trust__list">
+      <li class="trust__item reveal">
+        <span class="icon-tile icon-tile--green"><svg width="26" height="26" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M12 21s-6.5-6.1-6.5-11.2a6.5 6.5 0 0113 0C18.5 14.9 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><circle class="pop" cx="12" cy="9.8" r="2.3" fill="currentColor"/></svg></span>
+        <span><strong>Based in Edmonton</strong>Local, and easy to reach.</span>
+      </li>
+      <li class="trust__item reveal">
+        <span class="icon-tile icon-tile--coral"><svg width="26" height="26" aria-hidden="true" viewBox="0 0 24 24"><circle cx="9.5" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M3 20c.7-3.6 3.3-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path class="draw" d="M15 17.2l2.2 2.2 4.3-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><strong>A person checks every month</strong>Nothing goes out without sign-off.</span>
+      </li>
+      <li class="trust__item reveal">
+        <span class="icon-tile icon-tile--blue"><svg width="26" height="26" aria-hidden="true" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M3.5 10h17M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path class="draw" d="M9 15l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><strong>Your report by the 20th</strong>When receipts arrive by the 5th.</span>
+      </li>
+      <li class="trust__item reveal">
+        <span class="icon-tile icon-tile--amber"><svg width="26" height="26" aria-hidden="true" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M10.5 18.5h3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path class="draw" d="M9 9.5h6M9 12.5h4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+        <span><strong>Just snap and send</strong>Photos and emails. That's it.</span>
+      </li>
+    </ul>
+    <div class="logos" aria-label="Press and partners (placeholder)">
+      <span class="logos__label">Press and partners</span>
+      <span class="logo-slot">[LOGO]</span>
+      <span class="logo-slot">[LOGO]</span>
+      <span class="logo-slot">[LOGO]</span>
+      <span class="logo-slot">[LOGO]</span>
+    </div>
+  </div>
+</section>
+
+<!-- 3. HOW IT WORKS: animated showcase -->
+<section class="how section" id="how" aria-labelledby="how-title" data-showcase>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="how-title">Three steps. You only do the first one.</h2>
+      <p>Software does the sorting. A person does the checking. You get one page that makes sense.</p>
+    </div>
+
+    <div class="how__grid">
+      <!-- Desktop step list -->
+      <div class="how__steps" role="tablist" aria-label="How it works" data-steps>
+        <button role="tab" id="tab-0" aria-controls="scene-0" aria-selected="true" class="how__step is-active" data-goto="0">
+          <span class="how__num">1</span>
+          <span class="how__txt"><strong>Snap it</strong>Take a photo of the receipt, or forward the bill to one email address.<em class="who who--you">You do this</em></span>
+          <span class="how__timer" aria-hidden="true"><span></span></span>
+        </button>
+        <button role="tab" id="tab-1" aria-controls="scene-1" aria-selected="false" class="how__step" data-goto="1" tabindex="-1">
+          <span class="how__num">2</span>
+          <span class="how__txt"><strong>We sort and check it</strong>It is sorted, matched to your bank and checked by a person.<em class="who">We do this</em></span>
+          <span class="how__timer" aria-hidden="true"><span></span></span>
+        </button>
+        <button role="tab" id="tab-2" aria-controls="scene-2" aria-selected="false" class="how__step" data-goto="2" tabindex="-1">
+          <span class="how__num">3</span>
+          <span class="how__txt"><strong>You read one page</strong>A plain report: what came in, what went out, and the tax set aside.<em class="who">Ready by the 20th</em></span>
+          <span class="how__timer" aria-hidden="true"><span></span></span>
+        </button>
+      </div>
+
+      <!-- Mobile step tabs (separate mobile component) -->
+      <div class="how__tabs" aria-hidden="true">
+        <button type="button" class="is-active" data-goto="0" tabindex="-1">Snap</button>
+        <button type="button" data-goto="1" tabindex="-1">Sort and check</button>
+        <button type="button" data-goto="2" tabindex="-1">Read</button>
+      </div>
+
+      <div class="stage" data-stage>
+        <button class="stage__pause" type="button" data-pause aria-pressed="false">
+          <svg class="ico-pause" width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <svg class="ico-play" width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></svg>
+          <span data-pause-label>Pause</span>
+        </button>
+        <span class="stage__tag">Example</span>
+
+        <!-- Scene 1: receipt photo -->
+        <div class="scene scene--snap is-active" id="scene-0" role="tabpanel" aria-labelledby="tab-0">
+          <div class="phone">
+            <div class="phone__screen">
+              <div class="receipt">
+                <div class="receipt__store">HOME DEPOT #4412</div>
+                <div class="receipt__meta">EDMONTON AB<br>OCT 09 2026 14:22</div>
+                <div class="receipt__row"><span>LUMBER 2X4 X6</span><span>41.94</span></div>
+                <div class="receipt__row"><span>DECK SCREWS</span><span>12.98</span></div>
+                <div class="receipt__row"><span>CAULK X3</span><span>27.37</span></div>
+                <div class="receipt__row receipt__row--rule"><span>SUBTOTAL</span><span>82.29</span></div>
+                <div class="receipt__row"><span>GST 5%</span><span>4.11</span></div>
+                <div class="receipt__row receipt__row--total"><span>TOTAL</span><span>86.40</span></div>
+                <div class="receipt__barcode" aria-hidden="true"></div>
+              </div>
+              <div class="scanline" aria-hidden="true"></div>
+              <div class="frame-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="phone__shutter" aria-hidden="true"></div>
+          </div>
+          <div class="toast"><span class="tick tick--green"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Receipt sent to Easykeeps</div>
+        </div>
+
+        <!-- Scene 2: categorised ledger -->
+        <div class="scene scene--ledger" id="scene-1" role="tabpanel" aria-labelledby="tab-1" hidden>
+          <div class="ledger">
+            <div class="ledger__head"><span>October</span><span class="ledger__count">4 new items</span></div>
+            <div class="ledger__row ledger__row--new">
+              <span class="ledger__what"><b>Home Depot</b><small>Oct 9</small></span>
+              <span class="chip chip--green">Supplies</span>
+              <span class="ledger__amt">$86.40</span>
+              <span class="ledger__flags"><span class="chip chip--amber">GST $4.11</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
+            </div>
+            <div class="ledger__row">
+              <span class="ledger__what"><b>Shell</b><small>Oct 8</small></span>
+              <span class="chip chip--green">Vehicle</span>
+              <span class="ledger__amt">$72.15</span>
+              <span class="ledger__flags"><span class="chip chip--amber">GST $3.44</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
+            </div>
+            <div class="ledger__row ledger__row--flag">
+              <span class="ledger__what"><b>E-transfer in</b><small>Oct 7</small></span>
+              <span class="chip chip--coral">Who is this from?</span>
+              <span class="ledger__amt">$300.00</span>
+              <span class="ledger__flags"><span class="review-stamp"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><circle cx="9.5" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M3 20c.7-3.6 3.3-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path class="draw" d="M15 17.2l2.2 2.2 4.3-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Checked by a person</span></span>
+            </div>
+            <div class="ledger__row">
+              <span class="ledger__what"><b>Telus</b><small>Oct 3</small></span>
+              <span class="chip chip--green">Phone</span>
+              <span class="ledger__amt">$95.20</span>
+              <span class="ledger__flags"><span class="chip chip--amber">GST $4.53</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3: one-page monthly report -->
+        <div class="scene scene--report" id="scene-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+          <div class="report">
+            <div class="report__head">
+              <span><strong>September at a glance</strong><small>Your one-page report</small></span>
+              <span class="approved"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Approved</span>
+            </div>
+            <div class="report__kpis">
+              <div><small>Money in</small><b data-count="12480">$12,480</b></div>
+              <div><small>Money out</small><b data-count="7915">$7,915</b></div>
+              <div class="kpi--profit"><small>Profit</small><b data-count="4565">$4,565</b></div>
+              <div class="kpi--tax"><small>GST set aside</small><b data-count="624">$624</b></div>
+            </div>
+            <div class="report__chart" aria-hidden="true">
+              <div class="bars"><span style="--h:.62"></span><span class="out" style="--h:.44"></span><em>Jul</em></div>
+              <div class="bars"><span style="--h:.74"></span><span class="out" style="--h:.5"></span><em>Aug</em></div>
+              <div class="bars"><span style="--h:.92"></span><span class="out" style="--h:.58"></span><em>Sep</em></div>
+              <div class="legend"><span><i class="in"></i>In</span><span><i class="out"></i>Out</span></div>
+            </div>
+            <p class="report__note">Cash in the bank: <b>$9,302</b>. Nothing needs your attention this month.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. VERIFIED HUMAN REVIEW -->
+<section class="people section" id="people" aria-labelledby="people-title">
+  <div class="wrap people__grid">
+    <figure class="people__photo reveal">
+      <img src="assets/img/review-lead-checking-books.jpg" alt="[REVIEW LEAD NAME] checking a client's monthly report" width="1600" height="1200" loading="lazy">
+      <div class="name-chip name-chip--a">
+        <img src="assets/img/portrait-review-lead.jpg" alt="" width="48" height="48" loading="lazy">
+        <span><b class="ph">[REVIEW LEAD NAME]</b><small>Review lead, Edmonton</small></span>
+      </div>
+      <div class="name-chip name-chip--b">
+        <img src="assets/img/portrait-automation-lead.jpg" alt="" width="48" height="48" loading="lazy">
+        <span><b class="ph">[AUTOMATION LEAD NAME]</b><small>Automation lead, Edmonton</small></span>
+      </div>
+    </figure>
+    <div class="people__copy reveal">
+      <p class="eyebrow">Verified human review</p>
+      <h2 id="people-title">Checked by a real person. Every month.</h2>
+      <p class="lead">Software does the first pass. Then our review lead, an accounting student with dealership accounting experience, checks every flagged item and approves your month. Nothing reaches you or the CRA without that sign-off.</p>
+      <ul class="checks">
+        <li><span class="mark mark--coral"></span><span><b class="t-coral">Every flagged item</b> looked at by a person</span></li>
+        <li><span class="mark mark--green"></span><span><b class="t-green">Bank and card accounts</b> reconciled each month</span></li>
+        <li><span class="mark mark--blue"></span><span><b class="t-blue">Every change logged</b>, so any number can be traced</span></li>
+      </ul>
+      <div class="disclaimer">
+        <svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <p>Easykeeps is a bookkeeping service, not a CPA firm. We don't do audits, reviews, compilations or tax advice. For tax returns and year-end, you work with a CPA, and we hand them clean books.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. REVIEWS (placeholders) -->
+<section class="reviews section" id="reviews" aria-labelledby="reviews-title">
+  <div class="wrap">
+    <div class="section-head section-head--row reveal">
+      <h2 id="reviews-title">What owners say</h2>
+      <p class="ph-note">Placeholder cards. Reviews from our first clients go here.</p>
+    </div>
+    <div class="reviews__grid">
+      <figure class="review review--feature reveal">
+        <span class="review__tag">Placeholder</span>
+        <blockquote><p>&ldquo;[CLIENT QUOTE: one or two sentences about what changed for them, in their words.]&rdquo;</p></blockquote>
+        <figcaption>
+          <img src="assets/img/review-client-1.jpg" alt="" width="56" height="56" loading="lazy">
+          <span><b>[CLIENT NAME]</b><small>[BUSINESS NAME], [TYPE OF BUSINESS]</small></span>
+        </figcaption>
+      </figure>
+      <figure class="review review--blue reveal">
+        <span class="review__tag">Placeholder</span>
+        <blockquote><p>&ldquo;[CLIENT QUOTE]&rdquo;</p></blockquote>
+        <figcaption>
+          <img src="assets/img/review-client-2.jpg" alt="" width="48" height="48" loading="lazy">
+          <span><b>[CLIENT NAME]</b><small>[BUSINESS NAME], [TYPE OF BUSINESS]</small></span>
+        </figcaption>
+      </figure>
+      <figure class="review review--amber reveal">
+        <span class="review__tag">Placeholder</span>
+        <blockquote><p>&ldquo;[CLIENT QUOTE]&rdquo;</p></blockquote>
+        <figcaption>
+          <img src="assets/img/review-client-3.jpg" alt="" width="48" height="48" loading="lazy">
+          <span><b>[CLIENT NAME]</b><small>[BUSINESS NAME], [TYPE OF BUSINESS]</small></span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 6. PRICING -->
+<section class="pricing section" id="pricing" aria-labelledby="pricing-title" data-pricing>
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="provisional">Prices are provisional</span>
+      <h2 id="pricing-title">Simple monthly pricing.</h2>
+      <p>Plans go by how many transactions you have each month. Not sure which fits? Talk to us and we'll tell you.</p>
+    </div>
+
+    <div class="pricing__controls">
+      <div class="toggle" role="group" aria-label="Billing period">
+        <button type="button" class="toggle__btn is-active" aria-pressed="true" data-period="monthly">Monthly</button>
+        <button type="button" class="toggle__btn" aria-pressed="false" data-period="annual">Annual</button>
+        <span class="toggle__thumb" aria-hidden="true"></span>
+      </div>
+      <ul class="legend-key" aria-label="Colour key">
+        <li><span class="mark mark--green"></span>Your books</li>
+        <li><span class="mark mark--amber"></span>Tax</li>
+        <li><span class="mark mark--coral"></span>Human review</li>
+        <li><span class="mark mark--blue"></span>Reports and calls</li>
+      </ul>
+    </div>
+
+    <!-- Mobile plan picker (separate mobile component) -->
+    <div class="plan-tabs" role="tablist" aria-label="Plans">
+      <button role="tab" type="button" aria-selected="false" data-plan-tab="essentials" aria-controls="plan-essentials">Essentials</button>
+      <button role="tab" type="button" aria-selected="true" class="is-active" data-plan-tab="standard" aria-controls="plan-standard">Standard</button>
+      <button role="tab" type="button" aria-selected="false" data-plan-tab="established" aria-controls="plan-established" class="plan-tabs__premium">Established</button>
+    </div>
+
+    <div class="plans">
+      <article class="plan plan--essentials reveal" id="plan-essentials" data-plan="essentials" aria-labelledby="p-ess">
+        <div class="plan__top">
+          <h3 id="p-ess">Essentials</h3>
+          <p class="plan__tag">For solo owners keeping it simple.</p>
+        </div>
+        <div class="plan__price" data-price-monthly="$350" data-price-annual="[ANNUAL PRICE]">
+          <b data-price>$350</b><span data-per>/ month</span>
+        </div>
+        <p class="plan__annual-note" data-annual-note hidden>Annual price to be confirmed.</p>
+        <a class="btn btn--outline btn--block" href="#start">Get started</a>
+        <ul class="feats">
+          <li class="f--green"><span class="mark mark--green"></span><span>Up to <b>75 transactions</b> a month</span></li>
+          <li class="f--green"><span class="mark mark--green"></span><span><b>2 accounts</b>, bank or card</span></li>
+          <li class="f--green"><span class="mark mark--green"></span><span><b>Monthly reconciliation</b></span></li>
+          <li class="f--amber"><span class="mark mark--amber"></span><span><b>GST tracked</b> every month</span></li>
+          <li class="f--blue"><span class="mark mark--blue"></span><span><b>Monthly report</b>, basic</span></li>
+          <li class="f--coral"><span class="mark mark--coral"></span><span>Your month <b>signed off by a person</b></span></li>
+        </ul>
+      </article>
+
+      <article class="plan plan--standard reveal" id="plan-standard" data-plan="standard" aria-labelledby="p-std">
+        <div class="plan__top">
+          <h3 id="p-std">Standard</h3>
+          <p class="plan__tag">For busy businesses with more going on.</p>
+        </div>
+        <div class="plan__price" data-price-monthly="$550" data-price-annual="[ANNUAL PRICE]">
+          <b data-price>$550</b><span data-per>/ month</span>
+        </div>
+        <p class="plan__annual-note" data-annual-note hidden>Annual price to be confirmed.</p>
+        <a class="btn btn--primary btn--block" href="#start">Get started</a>
+        <ul class="feats">
+          <li class="f--green"><span class="mark mark--green"></span><span>Up to <b>150 transactions</b> a month</span></li>
+          <li class="f--green"><span class="mark mark--green"></span><span><b>3 accounts</b>, bank or card</span></li>
+          <li class="f--green"><span class="mark mark--green"></span><span><b>Monthly reconciliation</b></span></li>
+          <li class="f--amber"><span class="mark mark--amber"></span><span><b>GST tracked</b> every month</span></li>
+          <li class="f--coral"><span class="mark mark--coral"></span><span><b>Who owes you, and who you owe</b>, reviewed</span></li>
+          <li class="f--blue"><span class="mark mark--blue"></span><span><b>20-minute call</b> each month</span></li>
+          <li class="f--coral"><span class="mark mark--coral"></span><span>Your month <b>signed off by a person</b></span></li>
+        </ul>
+      </article>
+
+      <article class="plan plan--established reveal" id="plan-established" data-plan="established" aria-labelledby="p-est">
+        <span class="plan__shine" aria-hidden="true"></span>
+        <div class="plan__top">
+          <h3 id="p-est">Established <span class="plan__chip">Most complete</span></h3>
+          <p class="plan__tag">For established businesses that want it all handled.</p>
+        </div>
+        <div class="plan__price" data-price-monthly="$850" data-price-annual="[ANNUAL PRICE]">
+          <small data-from>from</small><b data-price>$850</b><span data-per>/ month</span>
+        </div>
+        <p class="plan__annual-note" data-annual-note hidden>Annual price to be confirmed.</p>
+        <p class="plan__soon">Opening soon. Talk to us to get on the list.</p>
+        <a class="btn btn--mint btn--block" href="#talk">Talk to us</a>
+        <ul class="feats feats--dark">
+          <li class="feats__all">Everything in Standard, plus:</li>
+          <li class="f--green"><span class="mark mark--mint"></span><span>Up to <b>250 transactions</b> a month</span></li>
+          <li class="f--green"><span class="mark mark--mint"></span><span><b>5 accounts</b>, bank or card</span></li>
+          <li class="f--amber"><span class="mark mark--amber"></span><span><b>GST tracked</b> across every account</span></li>
+          <li class="f--blue"><span class="mark mark--blue"></span><span><b>20-minute call</b> each month</span></li>
+          <li class="f--coral"><span class="mark mark--coral"></span><span>Your month <b>signed off by a person</b></span></li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="fine">Prices in CAD, plus GST. One-time setup is $400 to $800. Messy books get a paid check first, then a cleanup quote. GST filing is priced separately. You pay for your own QuickBooks Online or Xero subscription. A transaction is one bank line or one document.</p>
+  </div>
+</section>
+
+<!-- 7. FAQ -->
+<section class="faq section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq__grid">
+    <div class="faq__side reveal">
+      <h2 id="faq-title">Questions owners ask</h2>
+      <p>Still not sure? We're happy to talk it through.</p>
+      <a class="btn btn--outline" href="#talk">Talk to us</a>
+    </div>
+    <div class="faq__list reveal">
+      <details class="qa" open>
+        <summary>Do I need to be good with computers?<span class="qa__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path class="v" d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></summary>
+        <div class="qa__a"><p>No. If you can take a photo with your phone and forward an email, you can do this. We set up everything else for you.</p></div>
+      </details>
+      <details class="qa">
+        <summary>What do I have to do each month?<span class="qa__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path class="v" d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></summary>
+        <div class="qa__a"><p>Snap your receipts or forward your bills to one email address, ideally by the 5th. Your bank feed does the rest, and your report arrives by the 20th.</p></div>
+      </details>
+      <details class="qa">
+        <summary>Is a real person looking at my books?<span class="qa__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path class="v" d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></summary>
+        <div class="qa__a"><p>Yes. Software does the first pass, then our review lead checks every flagged item and approves your month before anything goes to you or the CRA.</p></div>
+      </details>
+      <details class="qa">
+        <summary>Are you accountants? Can you do my taxes?<span class="qa__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path class="v" d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></summary>
+        <div class="qa__a"><p>We're a bookkeeping service run by an accounting student, not a CPA firm, so we don't give tax advice or file tax returns. We keep your books clean and your GST tracked, so your CPA has an easy job at year-end.</p></div>
+      </details>
+      <details class="qa">
+        <summary>Is my financial information safe?<span class="qa__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path class="v" d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></summary>
+        <div class="qa__a"><p>We only use business-grade tools like QuickBooks Online or Xero, with two-step sign-in. We tell you where AI is part of the process, and every change is logged so any number can be traced.</p></div>
+      </details>
+      <details class="qa">
+        <summary>My books are a mess. Can you still help?<span class="qa__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path class="v" d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></summary>
+        <div class="qa__a"><p>Yes. We start with a paid check of where things stand, then give you a cleanup quote before your monthly bookkeeping begins.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 8. FINAL CALL TO ACTION + FOOTER -->
+<section class="final" id="start" aria-labelledby="final-title">
+  <div class="wrap final__grid">
+    <div class="final__copy reveal">
+      <h2 id="final-title">Let's get your books off your plate.</h2>
+      <p>Tell us a little about your business and we'll get back to you by email.</p>
+    </div>
+
+    <form class="form reveal" data-form novalidate>
+      <h3>Get started</h3>
+      <div class="field">
+        <label for="f-name">Your name</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name">
+        <p class="field__err" id="e-name" hidden>Please add your name.</p>
+      </div>
+      <div class="field">
+        <label for="f-biz">Type of business</label>
+        <select id="f-biz" name="business" required aria-describedby="e-biz">
+          <option value="">Choose one</option>
+          <option>Trades or contracting</option>
+          <option>Cleaning</option>
+          <option>Salon or beauty</option>
+          <option>Consulting</option>
+          <option>Something else</option>
+        </select>
+        <p class="field__err" id="e-biz" hidden>Please choose one.</p>
+      </div>
+      <div class="field">
+        <label for="f-contact">Email or phone</label>
+        <input id="f-contact" name="contact" type="text" autocomplete="email" spellcheck="false" required aria-describedby="h-contact e-contact">
+        <p class="field__help" id="h-contact">Whichever is easier for you.</p>
+        <p class="field__err" id="e-contact" hidden>Please add an email or phone number.</p>
+      </div>
+      <fieldset class="field field--chips">
+        <legend>Roughly how many transactions a month?</legend>
+        <div class="chips">
+          <label><input type="radio" name="volume" value="Under 75"><span>Under 75</span></label>
+          <label><input type="radio" name="volume" value="75 to 150"><span>75 to 150</span></label>
+          <label><input type="radio" name="volume" value="150 to 250"><span>150 to 250</span></label>
+          <label><input type="radio" name="volume" value="Not sure" checked><span>Not sure</span></label>
+        </div>
+      </fieldset>
+      <button class="btn btn--primary btn--block btn--lg" type="submit" data-submit>
+        <span class="btn__label">Get started</span>
+        <span class="btn__loading" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+      <p class="form__done" role="status" data-form-status></p>
+    </form>
+    <div class="talk reveal" id="talk">
+      <h3>Rather talk first?</h3>
+      <ul class="talk__list">
+        <li><a class="talk__item" href="mailto:hello@easykeeps.ca"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.75"/><path class="draw" d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><small>Email</small>hello@easykeeps.ca</span></a></li>
+        <li><a class="talk__item" href="tel:+11234567890"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M6.6 3.5h2.6l1.4 4-2 1.3a10.6 10.6 0 006.6 6.6l1.3-2 4 1.4v2.6a2 2 0 01-2.2 2A16.5 16.5 0 014.6 5.7a2 2 0 012-2.2z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg></span><span><small>Phone</small>123-456-7890</span></a></li>
+        <li><span class="talk__item talk__item--ph"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M4 18.5l1.2-3.6A7.8 7.8 0 1112 20a7.9 7.9 0 01-3.9-1z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><span><small>WhatsApp</small>[WHATSAPP NUMBER]</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <div class="footer__brand">
+        <span class="brand brand--light">
+          <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#087A56"/><rect class="bar bar--top" x="8" y="10" width="11" height="4" rx="2" fill="#2FD08F"/><rect class="bar bar--bottom" x="8" y="18" width="16" height="4" rx="2" fill="#FDFEFE"/></svg>
+          <span class="brand__word" translate="no">Easykeeps</span>
+        </span>
+        <p class="footer__motto">Balance on easy.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Footer">
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <address class="footer__contact">
+        <a href="mailto:hello@easykeeps.ca">hello@easykeeps.ca</a>
+        <a href="tel:+11234567890">123-456-7890</a>
+        <span>[STREET ADDRESS], Edmonton, AB</span>
+      </address>
+    </div>
+    <div class="wrap footer__legal">
+      <p>Easykeeps is a bookkeeping service, not a CPA firm. We don't provide audit, review or compilation engagements or tax advice.</p>
+      <p>&copy; 2026 Easykeeps. easykeeps.ca</p>
+    </div>
+  </footer>
+</section>
+
+</main>
+</body>
+</html>
