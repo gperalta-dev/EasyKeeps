@@ -129,6 +129,9 @@
     });
   }
 
+  /* Pause the wall while the hero is off screen, so scrolling stays smooth on phones */
+  if (hero && wall) onVisible(hero, function (v) { hero.classList.toggle("is-off", !v); }, { threshold: 0 });
+
   /* ---------- Works-with strip: a second copy makes the loop seamless ---------- */
   $$("[data-marquee]").forEach(function (m) {
     var track = $(".marquee__track", m);
@@ -551,6 +554,38 @@
     }, { threshold: 0.1, rootMargin: "0px 0px -4% 0px" });
     reveals.forEach(function (el) { ro.observe(el); });
   }
+
+  /* ---------- Copy the email address, for visitors with no email app ---------- */
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) resolve(); else reject();
+    });
+  }
+  function bindCopy(btn) {
+    var label = $("[data-copy-label]", btn);
+    var live = document.createElement("span");
+    live.className = "sr-only"; live.setAttribute("role", "status");
+    btn.parentNode.appendChild(live);
+    var timer = 0;
+    btn.addEventListener("click", function () {
+      var text = btn.getAttribute("data-copy");
+      copyText(text).then(function () {
+        label.textContent = "Copied"; btn.classList.add("is-copied"); live.textContent = text + " copied";
+      }, function () {
+        label.textContent = "Copy"; live.textContent = "Couldn't copy. The address is " + text;
+      });
+      clearTimeout(timer);
+      timer = setTimeout(function () { label.textContent = "Copy"; btn.classList.remove("is-copied"); live.textContent = ""; }, 2400);
+    });
+  }
+  $$("[data-copy]").forEach(bindCopy);
 
   /* ---------- Get started form: opens a pre-filled email ---------- */
   var form = $("[data-form]");
