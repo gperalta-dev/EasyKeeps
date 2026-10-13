@@ -11,12 +11,17 @@
 <link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/hero-owner-with-receipts.jpg" media="(min-width: 768px)">
 <link rel="preload" as="image" href="assets/img/hero-owner-with-receipts-mobile.jpg" media="(max-width: 767px)">
+<script>
+  /* Apply saved accessibility choices before the page paints */
+  try { (JSON.parse(localStorage.getItem("ek-a11y")) || []).forEach(function (c) { document.documentElement.classList.add("a11y-" + c); }); } catch (e) {}
+</script>
 <link rel="stylesheet" href="styles.css">
 <script defer src="main.js"></script>
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
+<div class="scroll-progress" aria-hidden="true"></div>
 
 <header class="nav" data-nav>
   <div class="nav__inner wrap">
@@ -26,8 +31,8 @@
     </a>
     <nav class="nav__links" aria-label="Main">
       <a href="#how">How it works</a>
+      <a href="#insight">Your report</a>
       <a href="#pricing">Pricing</a>
-      <a href="#reviews">Reviews</a>
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav__actions">
@@ -53,8 +58,8 @@
     </div>
     <nav class="sheet__links" aria-label="Mobile">
       <a href="#how" data-menu-link>How it works</a>
+      <a href="#insight" data-menu-link>Your report</a>
       <a href="#pricing" data-menu-link>Pricing</a>
-      <a href="#reviews" data-menu-link>Reviews</a>
       <a href="#faq" data-menu-link>FAQ</a>
     </nav>
     <div class="sheet__cta">
@@ -66,11 +71,11 @@
 
 <main id="main">
 
-<!-- 1. HERO -->
+<!-- 1. HERO: fills the first screen exactly -->
 <section class="hero" id="top" aria-labelledby="hero-title" data-hero>
   <picture class="hero__media">
-    <source media="(max-width: 767px)" srcset="assets/img/hero-owner-with-receipts-mobile.jpg">
-    <img src="assets/img/hero-owner-with-receipts.jpg" alt="An Edmonton business owner photographing receipts with their phone" width="2400" height="1500" fetchpriority="high">
+    <source media="(max-width: 767px)" srcset="assets/img/hero-owner-with-receipts-mobile.jpg" width="900" height="1353">
+    <img src="assets/img/hero-owner-with-receipts.jpg" alt="A small business owner at work, checking their phone" width="2000" height="1333" fetchpriority="high">
   </picture>
   <div class="hero__scrim" aria-hidden="true"></div>
 
@@ -96,32 +101,67 @@
       </a>
     </div>
 
-    <!-- Desktop floating receipt card (example data). Responds on hover. -->
-    <div class="hero-card" aria-hidden="true" data-hero-card>
-      <div class="hero-card__back">
-        <span class="dot-square dot-square--blue"></span>
-        <span><strong>September report</strong> ready to read</span>
+    <!-- Desktop: floating receipt card and money chips (example data). Respond on hover. -->
+    <div class="hero-visual" aria-hidden="true" data-hero-visual>
+      <div class="float-chip float-chip--balance">
+        <span class="float-chip__label">Cash in the bank</span>
+        <span class="float-chip__value" data-ticker="9302">$9,302</span>
+        <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="spark__area" d="M0 30 L15 26 L30 28 L45 20 L60 22 L75 14 L90 16 L105 8 L120 6 L120 36 L0 36Z"/><path class="spark__line" d="M0 30 L15 26 L30 28 L45 20 L60 22 L75 14 L90 16 L105 8 L120 6"/><circle class="spark__dot" cx="120" cy="6" r="3.5"/></svg>
       </div>
-      <div class="hero-card__front">
-        <div class="hero-card__head">
-          <span class="hero-card__icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 3h12v18l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3L6 21z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M9 8h6M9 11.5h6M9 15h3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
-          <span><strong>New receipt</strong><small>Example</small></span>
-          <span class="hero-card__amt">$86.40</span>
+
+      <div class="hero-card" data-hero-card>
+        <div class="hero-card__back">
+          <span class="dot-square dot-square--blue"></span>
+          <span><strong>September report</strong> ready to read</span>
         </div>
-        <div class="hero-card__vendor">Home Depot, Oct 9</div>
-        <ol class="hero-card__steps" data-hero-steps>
-          <li class="is-done" data-step="0"><span class="tick tick--green"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Sorted as <b class="t-green">Supplies</b></li>
-          <li data-step="1"><span class="tick tick--green"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Matched to your bank</li>
-          <li data-step="2"><span class="tick tick--amber"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b class="t-amber">$4.11 GST</b> set aside</li>
-          <li data-step="3"><span class="tick tick--coral"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Checked by a person</li>
-        </ol>
-        <div class="hero-card__bar"><span data-hero-progress></span></div>
+        <div class="hero-card__front">
+          <div class="hero-card__head">
+            <span class="hero-card__icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 3h12v18l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3L6 21z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M9 8h6M9 11.5h6M9 15h3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+            <span><strong>New receipt</strong><small>Example</small></span>
+            <span class="hero-card__amt">$86.40</span>
+          </div>
+          <div class="hero-card__vendor">Home Depot, Oct 9</div>
+          <ol class="hero-card__steps" data-hero-steps>
+            <li class="is-done" data-step="0"><span class="tick tick--green"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Sorted as <b class="t-green">Supplies</b></li>
+            <li data-step="1"><span class="tick tick--green"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Matched to your bank</li>
+            <li data-step="2"><span class="tick tick--amber"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b class="t-amber">$4.11 GST</b> set aside</li>
+            <li data-step="3"><span class="tick tick--coral"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Checked by a person</li>
+          </ol>
+          <div class="hero-card__bar"><span data-hero-progress></span></div>
+        </div>
+      </div>
+
+      <div class="float-chip float-chip--gst">
+        <span class="float-chip__coin"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M14.6 9.2c-.5-.8-1.5-1.2-2.6-1.2-1.5 0-2.6.8-2.6 2s1.1 1.6 2.6 2 2.6.8 2.6 2-1.1 2-2.6 2c-1.2 0-2.2-.5-2.7-1.3M12 6.5V8M12 16v1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+        <span><span class="float-chip__label">GST set aside</span><span class="float-chip__value float-chip__value--sm" data-ticker="624">$624</span></span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 2. TRUST BAR -->
+<!-- 2. WORKS WITH: moving strip of bank and software names (styled text, not official logos) -->
+<section class="works" aria-labelledby="works-title">
+  <div class="wrap works__head">
+    <h2 id="works-title" class="works__title">Works with your bank and software</h2>
+  </div>
+  <div class="marquee" data-marquee>
+    <ul class="marquee__track" aria-label="Banks and software we work with">
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--a">TD Bank</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--b">RBC</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--soft"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 15l3-3.5 2.5 2 3.5-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--c">QuickBooks Online</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--d">ATB Financial</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--b">BMO</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--soft"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 15l3-3.5 2.5 2 3.5-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--e">Xero</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--a">Scotiabank</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--b">CIBC</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--d">Servus Credit Union</span></li>
+      <li class="wm"><span class="wm__icon wm__icon--bank"><svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24"><path d="M3.5 9.5L12 4.5l8.5 5M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3.5 19.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span translate="no" class="wm__name wm__name--c">Tangerine</span></li>
+    </ul>
+  </div>
+  <p class="wrap works__note">Bank and software names belong to their owners. Easykeeps is independent and is not affiliated with or endorsed by them.</p>
+</section>
+
+<!-- 3. TRUST POINTS -->
 <section class="trust" id="trust" aria-label="Why owners trust us">
   <div class="wrap">
     <ul class="trust__list">
@@ -142,141 +182,219 @@
         <span><strong>Just snap and send</strong>Photos and emails. That's it.</span>
       </li>
     </ul>
-    <div class="logos" aria-label="Press and partners (placeholder)">
-      <span class="logos__label">Press and partners</span>
-      <span class="logo-slot">[LOGO]</span>
-      <span class="logo-slot">[LOGO]</span>
-      <span class="logo-slot">[LOGO]</span>
-      <span class="logo-slot">[LOGO]</span>
+  </div>
+</section>
+
+<!-- 4. HOW IT WORKS: pinned while you scroll. The background stays put and the steps change. -->
+<section class="how" id="how" aria-labelledby="how-title" data-scrolly>
+  <div class="wrap how__intro">
+    <h2 id="how-title" class="split">Three steps. You only do the first one.</h2>
+  </div>
+  <div class="how__track" data-track>
+    <div class="how__pin">
+      <div class="wrap how__grid">
+        <div class="how__side">
+          <ol class="how__steps" aria-label="How it works">
+            <li><button type="button" class="how__step is-active" data-goto="0" aria-current="step">
+              <span class="how__num">1</span>
+              <span class="how__txt"><strong>Snap it</strong>Take a photo of the receipt, or forward the bill to one email address.<em class="who who--you">You do this</em></span>
+            </button></li>
+            <li><button type="button" class="how__step" data-goto="1">
+              <span class="how__num">2</span>
+              <span class="how__txt"><strong>We sort and check it</strong>It is sorted, matched to your bank and checked by a person.<em class="who">We do this</em></span>
+            </button></li>
+            <li><button type="button" class="how__step" data-goto="2">
+              <span class="how__num">3</span>
+              <span class="how__txt"><strong>You read one page</strong>A plain report: what came in, what went out, and the tax set aside.<em class="who">Ready by the 20th</em></span>
+            </button></li>
+          </ol>
+          <div class="how__rail" aria-hidden="true"><span data-rail></span></div>
+        </div>
+
+        <!-- Phone version: step tabs on top, one caption under the stage -->
+        <div class="how__tabs" aria-hidden="true">
+          <button type="button" class="is-active" data-goto="0" tabindex="-1">Snap</button>
+          <button type="button" data-goto="1" tabindex="-1">Sort and check</button>
+          <button type="button" data-goto="2" tabindex="-1">Read</button>
+        </div>
+
+        <div class="stage" data-stage>
+          <span class="stage__tag">Example</span>
+
+          <!-- Scene 1: receipt photo -->
+          <div class="scene scene--snap is-active" data-scene="0">
+            <p class="scene__cap"><strong>Snap it.</strong> Take a photo, or forward the bill. You do this.</p>
+            <div class="phone">
+              <div class="phone__screen">
+                <div class="receipt">
+                  <div class="receipt__store">HOME DEPOT #4412</div>
+                  <div class="receipt__meta">EDMONTON AB<br>OCT 09 2026 14:22</div>
+                  <div class="receipt__row"><span>LUMBER 2X4 X6</span><span>41.94</span></div>
+                  <div class="receipt__row"><span>DECK SCREWS</span><span>12.98</span></div>
+                  <div class="receipt__row"><span>CAULK X3</span><span>27.37</span></div>
+                  <div class="receipt__row receipt__row--rule"><span>SUBTOTAL</span><span>82.29</span></div>
+                  <div class="receipt__row"><span>GST 5%</span><span>4.11</span></div>
+                  <div class="receipt__row receipt__row--total"><span>TOTAL</span><span>86.40</span></div>
+                  <div class="receipt__barcode" aria-hidden="true"></div>
+                </div>
+                <div class="scanline" aria-hidden="true"></div>
+                <div class="frame-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="phone__shutter" aria-hidden="true"></div>
+            </div>
+            <div class="toast"><span class="tick tick--green"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Receipt sent to Easykeeps</div>
+          </div>
+
+          <!-- Scene 2: categorised ledger -->
+          <div class="scene scene--ledger" data-scene="1">
+            <p class="scene__cap"><strong>We sort and check it.</strong> Sorted, matched to your bank, checked by a person.</p>
+            <div class="ledger">
+              <div class="ledger__head"><span>October</span><span class="ledger__count">4 new items</span></div>
+              <div class="ledger__row ledger__row--new">
+                <span class="ledger__what"><b>Home Depot</b><small>Oct 9</small></span>
+                <span class="chip chip--green">Supplies</span>
+                <span class="ledger__amt">$86.40</span>
+                <span class="ledger__flags"><span class="chip chip--amber">GST $4.11</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
+              </div>
+              <div class="ledger__row">
+                <span class="ledger__what"><b>Shell</b><small>Oct 8</small></span>
+                <span class="chip chip--green">Vehicle</span>
+                <span class="ledger__amt">$72.15</span>
+                <span class="ledger__flags"><span class="chip chip--amber">GST $3.44</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
+              </div>
+              <div class="ledger__row ledger__row--flag">
+                <span class="ledger__what"><b>E-transfer in</b><small>Oct 7</small></span>
+                <span class="chip chip--coral">Who is this from?</span>
+                <span class="ledger__amt">$300.00</span>
+                <span class="ledger__flags"><span class="review-stamp"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><circle cx="9.5" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M3 20c.7-3.6 3.3-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path class="draw" d="M15 17.2l2.2 2.2 4.3-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Checked by a person</span></span>
+              </div>
+              <div class="ledger__row ledger__row--extra">
+                <span class="ledger__what"><b>Telus</b><small>Oct 3</small></span>
+                <span class="chip chip--green">Phone</span>
+                <span class="ledger__amt">$95.20</span>
+                <span class="ledger__flags"><span class="chip chip--amber">GST $4.53</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scene 3: one-page monthly report -->
+          <div class="scene scene--report" data-scene="2">
+            <p class="scene__cap"><strong>You read one page.</strong> What came in, what went out, and the tax set aside.</p>
+            <div class="report">
+              <div class="report__head">
+                <span><strong>September at a glance</strong><small>Your one-page report</small></span>
+                <span class="approved"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Approved</span>
+              </div>
+              <div class="report__kpis">
+                <div><small>Money in</small><b data-count="12480">$12,480</b></div>
+                <div><small>Money out</small><b data-count="7915">$7,915</b></div>
+                <div class="kpi--profit"><small>Profit</small><b data-count="4565">$4,565</b></div>
+                <div class="kpi--tax"><small>GST set aside</small><b data-count="624">$624</b></div>
+              </div>
+              <div class="report__chart" aria-hidden="true">
+                <div class="bars"><span style="--h:.62"></span><span class="out" style="--h:.44"></span><em>Jul</em></div>
+                <div class="bars"><span style="--h:.74"></span><span class="out" style="--h:.5"></span><em>Aug</em></div>
+                <div class="bars"><span style="--h:.92"></span><span class="out" style="--h:.58"></span><em>Sep</em></div>
+                <div class="legend"><span><i class="in"></i>In</span><span><i class="out"></i>Out</span></div>
+              </div>
+              <p class="report__note">Cash in the bank: <b>$9,302</b>. Nothing needs your attention this month.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Invisible scroll markers: whichever one crosses the middle of the screen sets the step -->
+    <span class="how__marker" data-marker="0"></span>
+    <span class="how__marker" data-marker="1"></span>
+    <span class="how__marker" data-marker="2"></span>
+  </div>
+</section>
+
+<!-- 5. STORY: full-screen photo stays put while the words scroll over it -->
+<section class="story" aria-labelledby="story-title" data-story>
+  <div class="story__pin" aria-hidden="true">
+    <img class="story__bg is-on" src="assets/img/story-cafe-owner.jpg" alt="" width="1800" height="1013" loading="lazy" data-bg="0">
+    <img class="story__bg" src="assets/img/story-owner-at-laptop.jpg" alt="" width="1800" height="1200" loading="lazy" data-bg="1">
+    <img class="story__bg" src="assets/img/story-shop-owner.jpg" alt="" width="1800" height="1200" loading="lazy" data-bg="2">
+    <div class="story__scrim"></div>
+    <div class="story__dots"><i class="is-on"></i><i></i><i></i></div>
+  </div>
+  <div class="story__panels">
+    <div class="story__panel" data-panel="0">
+      <div class="story__card">
+        <h2 id="story-title">Made for people who would rather be working.</h2>
+        <p>Cafés, salons, shops and trades. You look after your customers. We look after the books.</p>
+      </div>
+    </div>
+    <div class="story__panel story__panel--right" data-panel="1">
+      <div class="story__card">
+        <h3>Ten minutes a month from you.</h3>
+        <p>Snap receipts between customers and forward bills to one email. That is your whole job.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-panel="2">
+      <div class="story__card">
+        <h3>One page that makes sense.</h3>
+        <p>By the 20th you know what came in, what went out, and what to set aside for GST.</p>
+        <a class="btn btn--primary" href="#start">Get started <svg class="btn__arrow" width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 3. HOW IT WORKS: animated showcase -->
-<section class="how section" id="how" aria-labelledby="how-title" data-showcase>
+<!-- 6. YOUR REPORT: interactive sample charts -->
+<section class="insight section" id="insight" aria-labelledby="insight-title" data-insight>
   <div class="wrap">
     <div class="section-head reveal">
-      <h2 id="how-title">Three steps. You only do the first one.</h2>
-      <p>Software does the sorting. A person does the checking. You get one page that makes sense.</p>
+      <span class="sample-tag">Sample numbers</span>
+      <h2 id="insight-title" class="split">See where your money goes.</h2>
+      <p>Your monthly report turns a pile of receipts into a picture you can read in a minute. Tap or hover to explore.</p>
     </div>
 
-    <div class="how__grid">
-      <!-- Desktop step list -->
-      <div class="how__steps" role="tablist" aria-label="How it works" data-steps>
-        <button role="tab" id="tab-0" aria-controls="scene-0" aria-selected="true" class="how__step is-active" data-goto="0">
-          <span class="how__num">1</span>
-          <span class="how__txt"><strong>Snap it</strong>Take a photo of the receipt, or forward the bill to one email address.<em class="who who--you">You do this</em></span>
-          <span class="how__timer" aria-hidden="true"><span></span></span>
-        </button>
-        <button role="tab" id="tab-1" aria-controls="scene-1" aria-selected="false" class="how__step" data-goto="1" tabindex="-1">
-          <span class="how__num">2</span>
-          <span class="how__txt"><strong>We sort and check it</strong>It is sorted, matched to your bank and checked by a person.<em class="who">We do this</em></span>
-          <span class="how__timer" aria-hidden="true"><span></span></span>
-        </button>
-        <button role="tab" id="tab-2" aria-controls="scene-2" aria-selected="false" class="how__step" data-goto="2" tabindex="-1">
-          <span class="how__num">3</span>
-          <span class="how__txt"><strong>You read one page</strong>A plain report: what came in, what went out, and the tax set aside.<em class="who">Ready by the 20th</em></span>
-          <span class="how__timer" aria-hidden="true"><span></span></span>
-        </button>
-      </div>
-
-      <!-- Mobile step tabs (separate mobile component) -->
-      <div class="how__tabs" aria-hidden="true">
-        <button type="button" class="is-active" data-goto="0" tabindex="-1">Snap</button>
-        <button type="button" data-goto="1" tabindex="-1">Sort and check</button>
-        <button type="button" data-goto="2" tabindex="-1">Read</button>
-      </div>
-
-      <div class="stage" data-stage>
-        <button class="stage__pause" type="button" data-pause aria-pressed="false">
-          <svg class="ico-pause" width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-          <svg class="ico-play" width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></svg>
-          <span data-pause-label>Pause</span>
-        </button>
-        <span class="stage__tag">Example</span>
-
-        <!-- Scene 1: receipt photo -->
-        <div class="scene scene--snap is-active" id="scene-0" role="tabpanel" aria-labelledby="tab-0">
-          <div class="phone">
-            <div class="phone__screen">
-              <div class="receipt">
-                <div class="receipt__store">HOME DEPOT #4412</div>
-                <div class="receipt__meta">EDMONTON AB<br>OCT 09 2026 14:22</div>
-                <div class="receipt__row"><span>LUMBER 2X4 X6</span><span>41.94</span></div>
-                <div class="receipt__row"><span>DECK SCREWS</span><span>12.98</span></div>
-                <div class="receipt__row"><span>CAULK X3</span><span>27.37</span></div>
-                <div class="receipt__row receipt__row--rule"><span>SUBTOTAL</span><span>82.29</span></div>
-                <div class="receipt__row"><span>GST 5%</span><span>4.11</span></div>
-                <div class="receipt__row receipt__row--total"><span>TOTAL</span><span>86.40</span></div>
-                <div class="receipt__barcode" aria-hidden="true"></div>
-              </div>
-              <div class="scanline" aria-hidden="true"></div>
-              <div class="frame-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-            </div>
-            <div class="phone__shutter" aria-hidden="true"></div>
-          </div>
-          <div class="toast"><span class="tick tick--green"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Receipt sent to Easykeeps</div>
-        </div>
-
-        <!-- Scene 2: categorised ledger -->
-        <div class="scene scene--ledger" id="scene-1" role="tabpanel" aria-labelledby="tab-1" hidden>
-          <div class="ledger">
-            <div class="ledger__head"><span>October</span><span class="ledger__count">4 new items</span></div>
-            <div class="ledger__row ledger__row--new">
-              <span class="ledger__what"><b>Home Depot</b><small>Oct 9</small></span>
-              <span class="chip chip--green">Supplies</span>
-              <span class="ledger__amt">$86.40</span>
-              <span class="ledger__flags"><span class="chip chip--amber">GST $4.11</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
-            </div>
-            <div class="ledger__row">
-              <span class="ledger__what"><b>Shell</b><small>Oct 8</small></span>
-              <span class="chip chip--green">Vehicle</span>
-              <span class="ledger__amt">$72.15</span>
-              <span class="ledger__flags"><span class="chip chip--amber">GST $3.44</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
-            </div>
-            <div class="ledger__row ledger__row--flag">
-              <span class="ledger__what"><b>E-transfer in</b><small>Oct 7</small></span>
-              <span class="chip chip--coral">Who is this from?</span>
-              <span class="ledger__amt">$300.00</span>
-              <span class="ledger__flags"><span class="review-stamp"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><circle cx="9.5" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M3 20c.7-3.6 3.3-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path class="draw" d="M15 17.2l2.2 2.2 4.3-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Checked by a person</span></span>
-            </div>
-            <div class="ledger__row">
-              <span class="ledger__what"><b>Telus</b><small>Oct 3</small></span>
-              <span class="chip chip--green">Phone</span>
-              <span class="ledger__amt">$95.20</span>
-              <span class="ledger__flags"><span class="chip chip--amber">GST $4.53</span><span class="ok"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Matched</span></span>
-            </div>
+    <div class="insight__grid">
+      <figure class="chart-card chart-card--area reveal">
+        <div class="chart-card__top">
+          <figcaption>
+            <span class="chart-card__title">Money in and out</span>
+            <span class="chart-card__big" data-profit-total>$41,775</span>
+            <span class="chart-card__sub" data-profit-label>profit over 12 months</span>
+          </figcaption>
+          <div class="seg" role="group" aria-label="Time range">
+            <button type="button" class="seg__btn" aria-pressed="false" data-range="6">6 months</button>
+            <button type="button" class="seg__btn is-active" aria-pressed="true" data-range="12">12 months</button>
           </div>
         </div>
+        <div class="chart-card__legend">
+          <button type="button" class="key key--in is-on" aria-pressed="true" data-series="in"><i></i>Money in</button>
+          <button type="button" class="key key--out is-on" aria-pressed="true" data-series="out"><i></i>Money out</button>
+        </div>
+        <div class="area" data-area tabindex="0" role="img" aria-label="Area chart of sample monthly money in and money out. Use the left and right arrow keys to read each month.">
+          <svg class="area__svg" data-area-svg preserveAspectRatio="none"></svg>
+          <div class="area__tip" data-area-tip hidden></div>
+        </div>
+      </figure>
 
-        <!-- Scene 3: one-page monthly report -->
-        <div class="scene scene--report" id="scene-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-          <div class="report">
-            <div class="report__head">
-              <span><strong>September at a glance</strong><small>Your one-page report</small></span>
-              <span class="approved"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Approved</span>
-            </div>
-            <div class="report__kpis">
-              <div><small>Money in</small><b data-count="12480">$12,480</b></div>
-              <div><small>Money out</small><b data-count="7915">$7,915</b></div>
-              <div class="kpi--profit"><small>Profit</small><b data-count="4565">$4,565</b></div>
-              <div class="kpi--tax"><small>GST set aside</small><b data-count="624">$624</b></div>
-            </div>
-            <div class="report__chart" aria-hidden="true">
-              <div class="bars"><span style="--h:.62"></span><span class="out" style="--h:.44"></span><em>Jul</em></div>
-              <div class="bars"><span style="--h:.74"></span><span class="out" style="--h:.5"></span><em>Aug</em></div>
-              <div class="bars"><span style="--h:.92"></span><span class="out" style="--h:.58"></span><em>Sep</em></div>
-              <div class="legend"><span><i class="in"></i>In</span><span><i class="out"></i>Out</span></div>
-            </div>
-            <p class="report__note">Cash in the bank: <b>$9,302</b>. Nothing needs your attention this month.</p>
+      <figure class="chart-card chart-card--donut reveal">
+        <figcaption class="chart-card__title">Where September's money went</figcaption>
+        <div class="donut" data-donut>
+          <svg class="donut__svg" viewBox="0 0 200 200" data-donut-svg aria-hidden="true"></svg>
+          <div class="donut__center" aria-live="polite">
+            <span class="donut__label" data-donut-label>Money out</span>
+            <span class="donut__value" data-donut-value>$7,915</span>
           </div>
         </div>
-      </div>
+        <ul class="donut__keys" data-donut-keys></ul>
+      </figure>
     </div>
+
+    <details class="data-table reveal">
+      <summary>Show these numbers as a table</summary>
+      <div class="data-table__wrap" data-table></div>
+    </details>
   </div>
 </section>
 
-<!-- 4. VERIFIED HUMAN REVIEW -->
+<!-- 7. VERIFIED HUMAN REVIEW -->
 <section class="people section" id="people" aria-labelledby="people-title">
   <div class="wrap people__grid">
     <figure class="people__photo reveal">
@@ -292,7 +410,7 @@
     </figure>
     <div class="people__copy reveal">
       <p class="eyebrow">Verified human review</p>
-      <h2 id="people-title">Checked by a real person. Every month.</h2>
+      <h2 id="people-title" class="split">Checked by a real person. Every month.</h2>
       <p class="lead">Software does the first pass. Then our review lead, an accounting student with dealership accounting experience, checks every flagged item and approves your month. Nothing reaches you or the CRA without that sign-off.</p>
       <ul class="checks">
         <li><span class="mark mark--coral"></span><span><b class="t-coral">Every flagged item</b> looked at by a person</span></li>
@@ -307,7 +425,7 @@
   </div>
 </section>
 
-<!-- 5. REVIEWS (placeholders) -->
+<!-- 8. REVIEWS (placeholders) -->
 <section class="reviews section" id="reviews" aria-labelledby="reviews-title">
   <div class="wrap">
     <div class="section-head section-head--row reveal">
@@ -343,12 +461,12 @@
   </div>
 </section>
 
-<!-- 6. PRICING -->
+<!-- 9. PRICING -->
 <section class="pricing section" id="pricing" aria-labelledby="pricing-title" data-pricing>
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="provisional">Prices are provisional</span>
-      <h2 id="pricing-title">Simple monthly pricing.</h2>
+      <h2 id="pricing-title" class="split">Simple monthly pricing.</h2>
       <p>Plans go by how many transactions you have each month. Not sure which fits? Talk to us and we'll tell you.</p>
     </div>
 
@@ -442,7 +560,7 @@
   </div>
 </section>
 
-<!-- 7. FAQ -->
+<!-- 10. FAQ -->
 <section class="faq section" id="faq" aria-labelledby="faq-title">
   <div class="wrap faq__grid">
     <div class="faq__side reveal">
@@ -479,7 +597,7 @@
   </div>
 </section>
 
-<!-- 8. FINAL CALL TO ACTION + FOOTER -->
+<!-- 11. FINAL CALL TO ACTION + FOOTER -->
 <section class="final" id="start" aria-labelledby="final-title">
   <div class="wrap final__grid">
     <div class="final__copy reveal">
@@ -532,7 +650,8 @@
       <ul class="talk__list">
         <li><a class="talk__item" href="mailto:hello@easykeeps.ca"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.75"/><path class="draw" d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><small>Email</small>hello@easykeeps.ca</span></a></li>
         <li><a class="talk__item" href="tel:+11234567890"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M6.6 3.5h2.6l1.4 4-2 1.3a10.6 10.6 0 006.6 6.6l1.3-2 4 1.4v2.6a2 2 0 01-2.2 2A16.5 16.5 0 014.6 5.7a2 2 0 012-2.2z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg></span><span><small>Phone</small>123-456-7890</span></a></li>
-        <li><span class="talk__item talk__item--ph"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M4 18.5l1.2-3.6A7.8 7.8 0 1112 20a7.9 7.9 0 01-3.9-1z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><span><small>WhatsApp</small>[WHATSAPP NUMBER]</span></span></li>
+        <!-- WhatsApp: same number as the phone. Hidden until launch; remove the hidden attribute to show it. -->
+        <li hidden data-whatsapp><a class="talk__item" href="https://wa.me/11234567890"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M4 18.5l1.2-3.6A7.8 7.8 0 1112 20a7.9 7.9 0 01-3.9-1z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><span><small>WhatsApp</small>123-456-7890</span></a></li>
       </ul>
     </div>
   </div>
@@ -554,7 +673,7 @@
       </nav>
       <address class="footer__contact">
         <a href="mailto:hello@easykeeps.ca">hello@easykeeps.ca</a>
-        <a href="tel:+11234567890">123-456-7890</a>
+        <a href="tel:+11234567890">Phone: 123-456-7890</a>
         <span>[STREET ADDRESS], Edmonton, AB</span>
       </address>
     </div>
@@ -566,5 +685,28 @@
 </section>
 
 </main>
+
+<!-- Accessibility options: bottom left, on every screen size -->
+<div class="a11y" data-a11y>
+  <button class="a11y__btn" type="button" aria-expanded="false" aria-controls="a11y-panel" data-a11y-open>
+    <svg width="26" height="26" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="4.6" r="1.9" fill="currentColor"/><path class="a11y__arms" d="M5 8.4c2.3.7 4.6 1 7 1s4.7-.3 7-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 9.6v4.6M12 14.2l-3 6.2M12 14.2l3 6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="sr-only">Accessibility options</span>
+  </button>
+  <div class="a11y__panel" id="a11y-panel" role="dialog" aria-label="Accessibility options" hidden data-a11y-panel>
+    <div class="a11y__head">
+      <h2>Make it easier to read</h2>
+      <button class="a11y__close" type="button" data-a11y-close><svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="sr-only">Close</span></button>
+    </div>
+    <ul class="a11y__list">
+      <li><button type="button" class="a11y__opt" aria-pressed="false" data-a11y-opt="text"><span class="a11y__ico">A<small>A</small></span><span>Bigger text</span><span class="a11y__sw" aria-hidden="true"></span></button></li>
+      <li><button type="button" class="a11y__opt" aria-pressed="false" data-a11y-opt="contrast"><span class="a11y__ico"><svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 010 17z" fill="currentColor"/></svg></span><span>Stronger contrast</span><span class="a11y__sw" aria-hidden="true"></span></button></li>
+      <li><button type="button" class="a11y__opt" aria-pressed="false" data-a11y-opt="still"><span class="a11y__ico"><svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span>Stop moving parts</span><span class="a11y__sw" aria-hidden="true"></span></button></li>
+      <li><button type="button" class="a11y__opt" aria-pressed="false" data-a11y-opt="links"><span class="a11y__ico"><svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0010 0V4M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>Underline links</span><span class="a11y__sw" aria-hidden="true"></span></button></li>
+      <li><button type="button" class="a11y__opt" aria-pressed="false" data-a11y-opt="spacing"><span class="a11y__ico"><svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>More space between lines</span><span class="a11y__sw" aria-hidden="true"></span></button></li>
+    </ul>
+    <button type="button" class="a11y__reset" data-a11y-reset>Reset to normal</button>
+  </div>
+</div>
+
 </body>
 </html>
