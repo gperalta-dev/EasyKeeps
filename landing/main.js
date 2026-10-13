@@ -106,6 +106,29 @@
     setTimeout(function () { countTo(el, +el.getAttribute("data-ticker"), 1400); }, 500 + i * 150);
   });
 
+  /* ---------- Hero background wall: each column loops, and leans toward the pointer ---------- */
+  $$(".wcol__inner").forEach(function (col) {
+    Array.prototype.slice.call(col.children).forEach(function (el) { col.appendChild(el.cloneNode(true)); });
+  });
+  var wall = $("[data-wall]");
+  if (hero && wall && window.matchMedia("(pointer: fine)").matches) {
+    var raf = 0, mx = 0, my = 0;
+    hero.addEventListener("pointermove", function (e) {
+      if (still()) return;
+      mx = e.clientX / window.innerWidth - 0.5;
+      my = e.clientY / window.innerHeight - 0.5;
+      if (!raf) raf = requestAnimationFrame(function () {
+        raf = 0;
+        wall.style.setProperty("--mx", mx.toFixed(3));
+        wall.style.setProperty("--my", my.toFixed(3));
+      });
+    });
+    hero.addEventListener("pointerleave", function () {
+      wall.style.setProperty("--mx", 0);
+      wall.style.setProperty("--my", 0);
+    });
+  }
+
   /* ---------- Works-with strip: a second copy makes the loop seamless ---------- */
   $$("[data-marquee]").forEach(function (m) {
     var track = $(".marquee__track", m);
