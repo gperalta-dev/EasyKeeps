@@ -818,20 +818,20 @@ a.talk__item:active { transform: scale(.98); }
 }
 .wm:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: transparent; }
 .wm__icon { width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; }
-.wm__icon--bank { background: var(--mint-soft); color: var(--green); }
 .wm__icon--soft { background: var(--blue-soft); color: var(--blue); }
 /* Official marks: shown as supplied, in their own colour, never animated or recoloured */
 .wm__icon--logo { background: none; }
 .wm__icon--qb { color: #2CA01C; }
 .wm__icon--xero { color: #13B5EA; }
 .wm:hover .wm__icon--logo svg { animation: none; }
+/* Bank logos as supplied, in their own colours, all set to one optical size */
+.wm--logo { padding: 10px 26px; }
+.wm__logo { display: block; height: var(--lh, 30px); width: auto; flex: none; }
 .wm:hover .wm__icon svg { animation: wiggle .5s var(--ease); }
 @keyframes wiggle { 30% { transform: rotate(-10deg) scale(1.1); } 60% { transform: rotate(6deg); } }
 .wm__name { white-space: nowrap; font-family: var(--font-display); font-size: 1.2rem; letter-spacing: -.01em; }
 .wm__name--a { font-weight: 800; }
-.wm__name--b { font-weight: 900; letter-spacing: .08em; }
 .wm__name--c { font-weight: 600; }
-.wm__name--d { font-weight: 700; font-family: var(--font-body); }
 .wm__name--e { font-weight: 800; letter-spacing: .02em; }
 .works__note { margin-top: 14px; text-align: center; font-size: .85rem; color: var(--slate); }
 
@@ -1013,6 +1013,8 @@ html.a11y-still .scroll-progress { display: none; }
 @media (max-width: 767px) {
   .works__title { font-size: 1rem; }
   .wm { min-height: 56px; }
+  .wm--logo { padding: 8px 20px; }
+  .wm__logo { height: calc(var(--lh, 30px) * .86); }
   .wm__name { font-size: 1.05rem; }
   .works__note { font-size: 1rem; }
   .story__panel, .story__panel--right { justify-content: center; align-items: flex-end; padding-bottom: 40px; }
