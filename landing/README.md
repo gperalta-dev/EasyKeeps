@@ -26,7 +26,6 @@ Files:
 
 - `[REVIEW LEAD NAME]` and `[AUTOMATION LEAD NAME]`: the name chips and the photo's alt text in "Checked by a real person".
 - `[CLIENT QUOTE]`, `[CLIENT NAME]`, `[BUSINESS NAME]`, `[TYPE OF BUSINESS]`: three review cards. Remove the "Placeholder" tags and the "Placeholder cards" note when real reviews go in.
-- `[PHONE NUMBER]`: "Rather talk first?" and the footer. When it's real, turn it into a `tel:` link.
 - `[WHATSAPP NUMBER]`: "Rather talk first?". When it's real, turn it into a `https://wa.me/1780XXXXXXX` link.
 - `[STREET ADDRESS]`: the footer.
 - `[LOGO]` (four slots): press or partner logos under the trust bar. Delete the row if there are none.
