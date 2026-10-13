@@ -13,12 +13,12 @@ Files:
 
 ### Stock photos in use
 
-Free to use under the Unsplash License (no attribution required, no watermarks). They show generic small business owners only. They are never used as the Easykeeps team, reviewers or clients.
+The hero has no photo: its background is a designed, slowly moving wall of charts, a pie, receipts and bank matches (example data, built in HTML and CSS).
+
+The photo story uses stock photos, free under the Unsplash License (no attribution required, no watermarks). They show generic small business owners only. They are never used as the Easykeeps team, reviewers or clients.
 
 | File | Where | Source |
 |---|---|---|
-| `hero-owner-with-receipts.jpg` | Hero, laptop and desktop (mirrored) | https://images.unsplash.com/photo-1687422808248-f807f4ea2a2e |
-| `hero-owner-with-receipts-mobile.jpg` | Hero, phones | https://images.unsplash.com/photo-1687293233211-6b0cc3beba70 |
 | `story-cafe-owner.jpg` | Photo story, first panel | https://images.unsplash.com/photo-1753351052363-53ce102830eb |
 | `story-owner-at-laptop.jpg` | Photo story, second panel | https://images.unsplash.com/photo-1687293233471-187c8df1beef |
 | `story-shop-owner.jpg` | Photo story, third panel | https://images.unsplash.com/photo-1758887261865-a2b89c0f7ac5 |
