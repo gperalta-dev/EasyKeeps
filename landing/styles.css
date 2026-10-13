@@ -1123,9 +1123,9 @@ html.a11y-still .scroll-progress { display: none; }
 /* Phones: the wall fills the top of the screen, the words sit underneath */
 @media (max-width: 767px) {
   .hero__wall {
-    top: -14%; right: -42%; width: 150%; height: 92%; gap: 14px; justify-content: center;
+    top: -2%; right: -42%; width: 150%; height: 84%; gap: 14px; justify-content: center;
     transform: perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(10deg);
-    -webkit-mask-image: linear-gradient(0deg, transparent 8%, #000 42%); mask-image: linear-gradient(0deg, transparent 8%, #000 42%);
+    -webkit-mask-image: linear-gradient(0deg, transparent 8%, #000 42%, #000 74%, rgba(0, 0, 0, .25) 92%); mask-image: linear-gradient(0deg, transparent 8%, #000 42%, #000 74%, rgba(0, 0, 0, .25) 92%);
   }
   .wcol { width: 184px; }
   .wcol__inner > * { margin-bottom: 14px; }
