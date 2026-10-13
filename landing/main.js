@@ -5,6 +5,13 @@
   var doc = document.documentElement;
   doc.classList.add("js");
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Accessibility choices are applied before anything starts moving */
+  var A11Y_KEY = "ek-a11y";
+  var a11ySaved = {};
+  try { a11ySaved = JSON.parse(localStorage.getItem(A11Y_KEY) || "{}") || {}; } catch (e) { a11ySaved = {}; }
+  ["big", "contrast", "calm", "links"].forEach(function (k) { doc.classList.toggle("a11y-" + k, !!a11ySaved[k]); });
+  function calm() { return reduced || doc.classList.contains("a11y-calm"); }
   var hasIO = "IntersectionObserver" in window;
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -16,17 +23,29 @@
     }, opts || { threshold: 0.25 }).observe(el);
   }
 
-  /* ---------- Navigation: solid once the hero is behind it ---------- */
+  /* ---------- Navigation solid once past the hero; pinned hero fades as the page rises over it ---------- */
   var nav = $("[data-nav]");
   var hero = $("[data-hero]");
-  if (nav && hero && hasIO) {
-    var navH = nav.offsetHeight;
-    new IntersectionObserver(function (entries) {
-      nav.classList.toggle("is-solid", !entries[0].isIntersecting);
-    }, { rootMargin: "-" + navH + "px 0px -" + Math.max(0, window.innerHeight - navH - 2) + "px 0px" }).observe(hero);
-  } else if (nav) {
-    nav.classList.add("is-solid");
+  var heroInner = hero ? $(".hero__inner", hero) : null;
+  function fitHero() {
+    if (!hero) return;
+    // Pin only when the hero fits the screen, so nothing in it can be covered before it's seen
+    hero.classList.remove("hero--pin");
+    hero.classList.toggle("hero--pin", hero.offsetHeight <= window.innerHeight + 2 && heroInner.offsetHeight <= window.innerHeight);
   }
+  function onScrollHero() {
+    if (!hero) return;
+    var h = hero.offsetHeight;
+    if (nav) nav.classList.toggle("is-solid", window.scrollY > h - nav.offsetHeight - 4);
+    if (!calm() && hero.classList.contains("hero--pin")) {
+      hero.style.setProperty("--hp", Math.min(1, Math.max(0, window.scrollY / h)).toFixed(3));
+    } else {
+      hero.style.removeProperty("--hp");
+    }
+  }
+  fitHero();
+  onScrollHero();
+  window.addEventListener("resize", function () { fitHero(); onScrollHero(); });
 
   /* ---------- Mobile menu sheet ---------- */
   var sheet = $("[data-sheet]");
@@ -71,12 +90,12 @@
     var last = heroStep === heroSteps.length - 1;
     heroStep = last ? 0 : heroStep + 1;
     paintHero();
-    heroTimer = setTimeout(tickHero, heroStep === heroSteps.length - 1 ? 3200 : 1500);
+    if (!calm()) heroTimer = setTimeout(tickHero, heroStep === heroSteps.length - 1 ? 2000 : 900);
   }
   if (hero && heroSteps.length && !reduced) {
     onVisible(hero, function (visible) {
       clearTimeout(heroTimer);
-      if (visible && !document.hidden) heroTimer = setTimeout(tickHero, 1500);
+      if (visible && !document.hidden && !calm()) heroTimer = setTimeout(tickHero, 900);
     }, { threshold: 0.1 });
   } else if (heroSteps.length) {
     heroStep = heroSteps.length - 1;
@@ -92,8 +111,8 @@
     var scenes = $$(".scene", show);
     var pauseBtn = $("[data-pause]", show);
     var pauseLabel = $("[data-pause-label]", show);
-    var DUR = [5200, 5200, 5600];
-    var idx = 0, timer = null, startedAt = 0, remaining = DUR[0], inView = false, paused = reduced;
+    var DUR = [3800, 3800, 4200];
+    var idx = 0, timer = null, startedAt = 0, remaining = DUR[0], inView = false, paused = calm();
 
     stepBtns.forEach(function (b, i) { b.style.setProperty("--dur", DUR[i] + "ms"); });
 
@@ -173,7 +192,8 @@
     tabBtns.forEach(function (b) { b.addEventListener("click", function () { go(+b.getAttribute("data-goto")); }); });
     pauseBtn.addEventListener("click", function () { setPaused(!paused); });
 
-    if (reduced) {
+    document.addEventListener("ek-calm", function (e) { setPaused(e.detail); });
+    if (paused) {
       show.classList.add("is-paused");
       stage.classList.add("is-paused");
     }
@@ -243,15 +263,290 @@
 
   /* ---------- Scroll reveal ---------- */
   var reveals = $$(".reveal");
-  if (reduced || !hasIO) {
+  if (calm() || !hasIO) {
     reveals.forEach(function (el) { el.classList.add("is-in"); });
   } else {
     var ro = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("is-in"); ro.unobserve(e.target); }
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    }, { threshold: 0, rootMargin: "0px 0px 12% 0px" });
     reveals.forEach(function (el) { ro.observe(el); });
+  }
+
+  /* ---------- Pinned photo story: background holds, words change with scroll ---------- */
+  var story = $("[data-story]");
+  var storyPanels = story ? $$("[data-story-panel]", story) : [];
+  var storyDots = story ? $$(".story__dots li", story) : [];
+  var storyIdx = -1;
+  function setStoryPinned() {
+    if (!story) return;
+    story.classList.toggle("is-pinned", !calm());
+    storyIdx = -1;
+    paintStory();
+  }
+  function paintStory() {
+    if (!story || !story.classList.contains("is-pinned")) return;
+    var r = story.getBoundingClientRect();
+    var run = story.offsetHeight - window.innerHeight;
+    var p = run > 0 ? Math.min(.999, Math.max(0, -r.top / run)) : 0;
+    var i = Math.floor(p * storyPanels.length);
+    if (i === storyIdx) return;
+    storyIdx = i;
+    storyPanels.forEach(function (el, n) { el.classList.toggle("is-active", n === i); });
+    storyDots.forEach(function (el, n) { el.classList.toggle("is-on", n === i); });
+  }
+  if (story) {
+    storyPanels[0].querySelector("img").loading = "eager";
+    // Fetch the other scene photos once the page has loaded, so no scene is blank when it appears
+    window.addEventListener("load", function () {
+      storyPanels.forEach(function (pnl) { pnl.querySelector("img").loading = "eager"; });
+    });
+    setStoryPinned();
+    document.addEventListener("ek-calm", setStoryPinned);
+  }
+
+  /* ---------- Interactive example chart ---------- */
+  var glance = $("[data-glance]");
+  if (glance) {
+    var MONTHS = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
+    var FULL = ["October", "November", "December", "January", "February", "March", "April", "May", "June", "July", "August", "September"];
+    var IN = [9800, 10450, 11900, 8600, 8900, 10200, 11350, 12100, 12900, 11800, 12150, 12480];
+    var OUT = [7100, 7350, 8400, 6900, 6700, 7250, 7600, 8050, 8300, 7700, 7840, 7915];
+    var CATS = [
+      { name: "Supplies", color: "#087A56", share: .377 },
+      { name: "Vehicle and fuel", color: "#D08A00", share: .178 },
+      { name: "Rent", color: "#2457F5", share: .24 },
+      { name: "Phone and internet", color: "#EF5A3C", share: .063 },
+      { name: "Other", color: "#8A9AA6", share: 0 }
+    ];
+    var money = function (n) { return "$" + Math.round(n).toLocaleString("en-CA"); };
+    var split = function (m) {
+      var total = OUT[m], used = 0;
+      var parts = CATS.map(function (c, k) {
+        if (k === CATS.length - 1) return 0;
+        var wobble = 1 + Math.sin((m + 1) * (k + 2)) * .08;
+        var v = Math.round(total * c.share * wobble / 5) * 5;
+        used += v;
+        return v;
+      });
+      parts[CATS.length - 1] = total - used;
+      return parts;
+    };
+    var svgA = $("[data-area-svg]", glance);
+    var tip = $("[data-area-tip]", glance);
+    var monthsBox = $("[data-months]", glance);
+    var sel = 11, drawn = false, W = 640, H = 280;
+    var PAD = { l: 44, r: 12, t: 14, b: 30 };
+    var MAX = 15000;
+    var NS = "http://www.w3.org/2000/svg";
+    var x = function (i) { return PAD.l + i * (W - PAD.l - PAD.r) / (MONTHS.length - 1); };
+    var y = function (v) { return PAD.t + (1 - v / MAX) * (H - PAD.t - PAD.b); };
+    var path = function (arr) { return arr.map(function (v, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); }).join(" "); };
+    var el = function (name, attrs, parent) {
+      var n = document.createElementNS(NS, name);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(n);
+      return n;
+    };
+
+    var drawArea = function (animate) {
+      W = Math.max(300, svgA.clientWidth || 640);
+      H = svgA.clientHeight || 280;
+      svgA.setAttribute("viewBox", "0 0 " + W + " " + H);
+      svgA.innerHTML = "";
+      var defs = el("defs", {}, svgA);
+      [["gin", "#087A56"], ["gout", "#2457F5"]].forEach(function (g) {
+        var lg = el("linearGradient", { id: g[0], x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+        el("stop", { offset: "0", "stop-color": g[1], "stop-opacity": ".22" }, lg);
+        el("stop", { offset: "1", "stop-color": g[1], "stop-opacity": "0" }, lg);
+      });
+      var step = (W - PAD.l - PAD.r) / (MONTHS.length - 1);
+      el("rect", { class: "sel", x: x(sel) - step / 2, y: PAD.t, width: step, height: H - PAD.t - PAD.b, rx: 8 }, svgA);
+      [0, 5000, 10000, 15000].forEach(function (v) {
+        el("line", { class: "grid", x1: PAD.l, x2: W - PAD.r, y1: y(v), y2: y(v) }, svgA);
+        var t = el("text", { class: "axis", x: PAD.l - 8, y: y(v) + 4, "text-anchor": "end" }, svgA);
+        t.textContent = v ? "$" + v / 1000 + "k" : "$0";
+      });
+      var every = W < 480 ? 2 : 1;
+      MONTHS.forEach(function (m, i) {
+        if ((sel - i) % every) return;
+        var t = el("text", { class: "axis", x: x(i), y: H - 8, "text-anchor": "middle" }, svgA);
+        t.textContent = m;
+      });
+      var base = " L" + x(MONTHS.length - 1) + " " + y(0) + " L" + x(0) + " " + y(0) + " Z";
+      el("path", { class: "fill", d: path(IN) + base, fill: "url(#gin)" }, svgA);
+      el("path", { class: "fill", d: path(OUT) + base, fill: "url(#gout)" }, svgA);
+      [["in", IN], ["out", OUT]].forEach(function (s2) {
+        var ln = el("path", { class: "line line--" + s2[0], d: path(s2[1]) }, svgA);
+        if (animate && !calm()) { ln.style.setProperty("--len", ln.getTotalLength()); ln.classList.add("draw-in"); }
+      });
+      el("line", { class: "cursor", x1: x(sel), x2: x(sel), y1: PAD.t, y2: H - PAD.b, "data-cursor": "" }, svgA);
+      el("circle", { class: "pt pt--in", cx: x(sel), cy: y(IN[sel]), r: 6, "data-pt-in": "" }, svgA);
+      el("circle", { class: "pt pt--out", cx: x(sel), cy: y(OUT[sel]), r: 6, "data-pt-out": "" }, svgA);
+      if (!animate) svgA.querySelectorAll(".fill").forEach(function (f) { f.style.animation = "none"; f.style.opacity = 1; });
+    };
+
+    var moveCursor = function (i) {
+      var c = $("[data-cursor]", svgA);
+      if (!c) return;
+      c.setAttribute("x1", x(i)); c.setAttribute("x2", x(i));
+      var a = $("[data-pt-in]", svgA), b = $("[data-pt-out]", svgA);
+      a.setAttribute("cx", x(i)); a.setAttribute("cy", y(IN[i]));
+      b.setAttribute("cx", x(i)); b.setAttribute("cy", y(OUT[i]));
+    };
+    var showTip = function (i) {
+      tip.hidden = false;
+      tip.innerHTML = "<b>" + FULL[i] + "</b>" +
+        "<span class=\"row\"><i style=\"background:#2FD08F\"></i><span>Money in</span><strong>" + money(IN[i]) + "</strong></span>" +
+        "<span class=\"row\"><i style=\"background:#8FAEFF\"></i><span>Money out</span><strong>" + money(OUT[i]) + "</strong></span>" +
+        "<span class=\"row\"><i></i><span>Profit</span><strong>" + money(IN[i] - OUT[i]) + "</strong></span>";
+      var box = svgA.getBoundingClientRect();
+      var px = x(i) / W * box.width;
+      var half = tip.offsetWidth / 2;
+      tip.style.left = Math.min(box.width - half, Math.max(half, px)) + "px";
+      tip.style.top = Math.max(0, y(IN[i]) / H * box.height - tip.offsetHeight - 14) + "px";
+    };
+    var nearest = function (clientX) {
+      var box = svgA.getBoundingClientRect();
+      var vx = (clientX - box.left) / box.width * W;
+      return Math.max(0, Math.min(MONTHS.length - 1, Math.round((vx - PAD.l) / ((W - PAD.l - PAD.r) / (MONTHS.length - 1)))));
+    };
+    svgA.addEventListener("pointermove", function (e) { var i = nearest(e.clientX); moveCursor(i); showTip(i); });
+    svgA.addEventListener("pointerleave", function () { tip.hidden = true; moveCursor(sel); });
+    svgA.addEventListener("click", function (e) { pick(nearest(e.clientX)); });
+
+    // Donut
+    var svgD = $("[data-donut-svg]", glance);
+    var legend = $("[data-donut-legend]", glance);
+    var cLabel = $("[data-donut-label]", glance), cValue = $("[data-donut-value]", glance);
+    var arc = function (a0, a1, r0, r1) {
+      var p = function (a, r) { return [110 + r * Math.sin(a), 110 - r * Math.cos(a)]; };
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var A = p(a0, r1), B = p(a1, r1), C = p(a1, r0), D = p(a0, r0);
+      return "M" + A + " A" + r1 + " " + r1 + " 0 " + large + " 1 " + B + " L" + C + " A" + r0 + " " + r0 + " 0 " + large + " 0 " + D + " Z";
+    };
+    var hot = function (k) {
+      svgD.classList.toggle("has-hot", k !== null);
+      $$("path", svgD).forEach(function (pp, n) { pp.classList.toggle("is-hot", n === k); });
+      $$("li", legend).forEach(function (li, n) { li.classList.toggle("is-hot", n === k); });
+      var parts = split(sel);
+      cLabel.textContent = k === null ? "Total out" : CATS[k].name;
+      cValue.textContent = money(k === null ? OUT[sel] : parts[k]);
+    };
+    var drawDonut = function (animate) {
+      var parts = split(sel), total = OUT[sel], a = 0;
+      svgD.innerHTML = "";
+      legend.innerHTML = "";
+      parts.forEach(function (v, k) {
+        var a1 = a + v / total * Math.PI * 2;
+        var pp = el("path", { d: arc(a, a1, 64, 104), fill: CATS[k].color }, svgD);
+        if (animate && !calm()) { pp.classList.add("arc-in"); pp.style.animationDelay = k * 70 + "ms"; }
+        pp.addEventListener("pointerenter", function () { hot(k); });
+        pp.addEventListener("pointerleave", function () { hot(null); });
+        a = a1;
+        var li = document.createElement("li");
+        li.innerHTML = "<i style=\"background:" + CATS[k].color + "\"></i><span>" + CATS[k].name + "</span><b>" + money(v) + "</b><small>" + Math.round(v / total * 100) + "%</small>";
+        li.addEventListener("pointerenter", function () { hot(k); });
+        li.addEventListener("pointerleave", function () { hot(null); });
+        legend.appendChild(li);
+      });
+      $("[data-donut-month]", glance).textContent = FULL[sel];
+      $("[data-profit]", glance).textContent = money(IN[sel] - OUT[sel]);
+      hot(null);
+    };
+
+    var pick = function (i) {
+      sel = i;
+      $$("button", monthsBox).forEach(function (b, n) { b.setAttribute("aria-pressed", n === i ? "true" : "false"); });
+      drawArea(false);
+      drawDonut(true);
+    };
+    MONTHS.forEach(function (m, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = m;
+      b.setAttribute("aria-label", FULL[i]);
+      b.setAttribute("aria-pressed", i === sel ? "true" : "false");
+      b.addEventListener("click", function () { pick(i); });
+      monthsBox.appendChild(b);
+    });
+    // Table view of the same numbers
+    var table = $("[data-glance-table]", glance);
+    var rows = "<thead><tr><th scope=\"col\">Month</th><th scope=\"col\">Money in</th><th scope=\"col\">Money out</th><th scope=\"col\">Profit</th></tr></thead><tbody>";
+    MONTHS.forEach(function (m, i) { rows += "<tr><th scope=\"row\">" + FULL[i] + "</th><td>" + money(IN[i]) + "</td><td>" + money(OUT[i]) + "</td><td>" + money(IN[i] - OUT[i]) + "</td></tr>"; });
+    table.insertAdjacentHTML("beforeend", rows + "</tbody>");
+
+    drawArea(false);
+    drawDonut(false);
+    onVisible(glance, function (v) {
+      if (v && !drawn) { drawn = true; drawArea(true); drawDonut(true); }
+    }, { threshold: 0.3 });
+    var rT;
+    window.addEventListener("resize", function () { clearTimeout(rT); rT = setTimeout(function () { drawArea(false); }, 150); });
+  }
+
+  /* ---------- Scroll progress line under the nav ---------- */
+  var prog = $("[data-progress]");
+  if (prog) {
+    var ticking = false;
+    var paintProgress = function () {
+      onScrollHero();
+      paintStory();
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      prog.style.setProperty("--p", max > 0 ? Math.min(1, window.scrollY / max).toFixed(4) : 0);
+      ticking = false;
+    };
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(paintProgress); }
+    }, { passive: true });
+    paintProgress();
+  }
+
+  /* ---------- Accessibility options ---------- */
+  var a11y = $("[data-a11y]");
+  if (a11y) {
+    var a11yBtn = $("[data-a11y-open]", a11y);
+    var a11yPanel = $("#a11y-panel", a11y);
+    var opts = $$("[data-a11y-opt]", a11y);
+    var save = function () {
+      try { localStorage.setItem(A11Y_KEY, JSON.stringify(a11ySaved)); } catch (e) { /* storage blocked: choices last for this visit */ }
+    };
+    var apply = function (key, on) {
+      a11ySaved[key] = on;
+      doc.classList.toggle("a11y-" + key, on);
+      opts.forEach(function (b) { if (b.getAttribute("data-a11y-opt") === key) b.setAttribute("aria-pressed", on ? "true" : "false"); });
+      if (key === "big") { fitHero(); onScrollHero(); }
+      if (key === "calm") {
+        document.dispatchEvent(new CustomEvent("ek-calm", { detail: on || reduced }));
+        if (on) { clearTimeout(heroTimer); heroStep = heroSteps.length - 1; paintHero(); }
+        else if (!reduced) heroTimer = setTimeout(tickHero, 900);
+        if (on) reveals.forEach(function (el) { el.classList.add("is-in"); });
+      }
+    };
+    opts.forEach(function (b) {
+      var key = b.getAttribute("data-a11y-opt");
+      b.setAttribute("aria-pressed", a11ySaved[key] ? "true" : "false");
+      b.addEventListener("click", function () { apply(key, !a11ySaved[key]); save(); });
+    });
+    $("[data-a11y-reset]", a11y).addEventListener("click", function () {
+      ["big", "contrast", "calm", "links"].forEach(function (k) { if (a11ySaved[k]) apply(k, false); });
+      save();
+    });
+    var closePanel = function (focusBtn) {
+      if (a11yPanel.hidden) return;
+      a11yPanel.hidden = true;
+      a11yBtn.setAttribute("aria-expanded", "false");
+      if (focusBtn) a11yBtn.focus();
+    };
+    a11yBtn.addEventListener("click", function () {
+      var open = a11yPanel.hidden;
+      a11yPanel.hidden = !open;
+      a11yBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) opts[0].focus();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePanel(true); });
+    document.addEventListener("click", function (e) { if (!a11y.contains(e.target)) closePanel(false); });
   }
 
   /* ---------- Get started form: opens a pre-filled email ---------- */
