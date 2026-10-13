@@ -185,6 +185,12 @@
     stepBtns.concat(tabBtns).forEach(function (b) {
       b.addEventListener("click", function () { goTo(+b.getAttribute("data-goto")); });
     });
+
+    /* The scenes loop only while the section is on screen, and start fresh when it arrives */
+    onVisible(track, function (v) {
+      scrolly.classList.toggle("is-off", !v);
+      if (v && current > -1) { var s = scenes[current]; s.classList.remove("is-active"); void s.offsetWidth; s.classList.add("is-active"); }
+    }, { threshold: 0, rootMargin: "0px 0px -25% 0px" });
   }
 
   /* ---------- Story: the photo behind stays put and changes with the words ---------- */
@@ -471,6 +477,32 @@
     onVisible(insight, function (v) {
       if (v && !started) { started = true; drawArea(true); updateTotal(); growDonut(); }
     }, { threshold: 0.2 });
+    /* Phones have no hover, so the charts point things out on their own until touched */
+    if (window.matchMedia("(hover: none)").matches) {
+      var tourT = 0, tourWait = 0, tourI = -1, touched = false;
+      var dCenter = $(".donut__center", insight);
+      var stopTour = function () {
+        if (touched) return;
+        touched = true; clearTimeout(tourWait); clearInterval(tourT);
+        if (dCenter) dCenter.setAttribute("aria-live", "polite");
+      };
+      var tick = function () {
+        if (still() || touched || !geo) return;
+        tourI = (tourI + 1) % geo.inS.length;
+        showPoint(tourI);
+        focusCat(tourI % CATS.length);
+      };
+      [area, donut, keys].forEach(function (el) { el.addEventListener("pointerdown", stopTour); });
+      onVisible(insight, function (v) {
+        clearTimeout(tourWait); clearInterval(tourT);
+        if (touched) return;
+        if (v && !still()) {
+          if (dCenter) dCenter.setAttribute("aria-live", "off");
+          tourWait = setTimeout(function () { tick(); tourT = setInterval(tick, 1500); }, 1400);
+        } else { hidePoint(); clearCat(); }
+      }, { threshold: 0.3 });
+    }
+
     if ("ResizeObserver" in window) {
       var lastW = area.clientWidth;
       new ResizeObserver(function () {
