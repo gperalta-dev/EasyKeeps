@@ -610,6 +610,28 @@
     fmark.parentNode.addEventListener("pointerleave", function () { fword.style.removeProperty("--fx"); fword.style.removeProperty("--fy"); });
   }
 
+  /* ---------- "Talk to us": on wide screens the options sit beside the form, so show the whole
+     contact section rather than jumping past the form to the bottom of the page ---------- */
+  var talk = $("#talk");
+  var start = $("#start");
+  var wideMQ = window.matchMedia("(min-width: 961px)");
+  if (talk && start) {
+    $$('a[href="#talk"]').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        if (!wideMQ.matches) return;
+        e.preventDefault();
+        start.scrollIntoView({ behavior: still() ? "auto" : "smooth", block: "start" });
+        talk.focus({ preventScroll: true });
+        talk.classList.remove("is-flash");
+        void talk.offsetWidth;
+        talk.classList.add("is-flash");
+      });
+    });
+    talk.addEventListener("animationend", function (e) {
+      if (e.animationName === "talk-flash" && !e.target.closest(".talk__row")) talk.classList.remove("is-flash");
+    });
+  }
+
   /* ---------- Copy the email address, for visitors with no email app ---------- */
   function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
@@ -663,6 +685,18 @@
       r.el.addEventListener("blur", function () { if (r.el.getAttribute("aria-invalid") === "true") check(r); });
       r.el.addEventListener("input", function () { if (r.el.getAttribute("aria-invalid") === "true") check(r); });
     });
+    /* What happens next: step 1's outline fills as the three questions are answered */
+    var steps = $$("[data-next-step]");
+    var fill = $("[data-next-fill]");
+    var progress = function () {
+      if (!fill) return;
+      var n = rules.filter(function (r) { return r.el.value.trim() !== ""; }).length;
+      fill.style.strokeDashoffset = String(100 - (n / rules.length) * 100);
+      steps[0].classList.toggle("is-ready", n === rules.length);
+    };
+    form.addEventListener("input", progress);
+    form.addEventListener("change", progress);
+    progress();
     var endpoint = form.getAttribute("data-endpoint");
     var thanks = $("[data-form-thanks]", form);
     var mailtoFor = function (data) {
@@ -679,6 +713,11 @@
       form.classList.add("is-sent");
       thanks.hidden = false;
       thanks.focus();
+      if (steps.length > 1) {
+        steps[0].classList.remove("is-current", "is-ready");
+        steps[0].classList.add("is-done");
+        steps[1].classList.add("is-current");
+      }
     };
     /* If the send fails, the visitor still has two easy ways to reach us */
     var showFallback = function (data) {
