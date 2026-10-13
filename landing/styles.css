@@ -620,9 +620,8 @@ a.talk__item:active { transform: scale(.98); }
 
 /* ---------- Laptop and below ---------- */
 @media (max-width: 1100px) {
-  .hero__inner { grid-template-columns: minmax(0, 1fr) 340px; }
+  .hero__inner { grid-template-columns: minmax(0, 1fr) 380px; gap: 32px; }
   .hero-card { width: 320px; }
-  .float-chip--balance { left: -24px; }
   .trust__list { grid-template-columns: repeat(2, 1fr); }
   .plans { grid-template-columns: 1fr 1fr; }
   .plan--established { grid-column: 1 / -1; }
@@ -778,7 +777,8 @@ a.talk__item:active { transform: scale(.98); }
 }
 
 /* ---------- Hero visual: receipt card with money chips ---------- */
-.hero-visual { position: relative; justify-self: end; padding: 118px 24px 90px 64px; }
+/* Money chips sit in a band above the card so nothing overlaps, including the "September report" pill that slides out under the card on hover */
+.hero-visual { position: relative; justify-self: end; padding: 140px 16px 56px 44px; }
 .float-chip {
   position: absolute; z-index: 3; display: flex; align-items: center; gap: 12px;
   background: rgba(253, 254, 254, .96); color: var(--ink); border-radius: 18px; padding: 12px 16px;
@@ -789,12 +789,12 @@ a.talk__item:active { transform: scale(.98); }
 .float-chip__value { display: block; font: 800 1.6rem/1.1 var(--font-display); letter-spacing: -.02em; }
 .float-chip__value--sm { font-size: 1.15rem; color: var(--amber-t); }
 .float-chip--balance { top: 0; left: 0; display: grid; gap: 2px; padding: 14px 18px 10px; width: 210px; animation: rise .9s .45s var(--ease) both, bob 6s 1.4s ease-in-out infinite; }
-.float-chip--gst { bottom: 18px; right: 0; animation: rise .9s .6s var(--ease) both, bob 7s 2s ease-in-out infinite reverse; }
+.float-chip--gst { top: 30px; right: 0; animation: rise .9s .6s var(--ease) both, bob 7s 2s ease-in-out infinite reverse; }
 @keyframes bob { 50% { translate: 0 -10px; } }
 .float-chip__coin { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--amber-soft); color: var(--amber-t); }
 .float-chip__coin svg { animation: coin-spin 4s 2s ease-in-out infinite; }
 @keyframes coin-spin { 0%, 70% { transform: rotateY(0); } 85% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
-.spark { width: 100%; height: 36px; margin-top: 4px; overflow: visible; }
+.spark { width: 100%; height: 30px; margin-top: 4px; overflow: visible; }
 .spark__line { fill: none; stroke: var(--green); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 160; animation: spark-draw 4.5s 1s var(--ease) infinite; }
 .spark__area { fill: var(--mint-soft); animation: spark-fade 4.5s 1s var(--ease) infinite; }
 .spark__dot { fill: var(--green); stroke: #fff; stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: dot-pulse 1.6s ease-in-out infinite; }
@@ -998,6 +998,7 @@ html.a11y-still .scroll-progress { display: none; }
 
 /* ---------- Additions: laptop, tablet, phone ---------- */
 @media (max-width: 1100px) {
+  .float-chip--balance { width: 190px; }
   .insight__grid { grid-template-columns: 1fr 1fr; }
   .chart-card--area { grid-column: 1 / -1; }
   .chart-card--donut { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 28px; }
