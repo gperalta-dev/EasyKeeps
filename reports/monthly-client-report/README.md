@@ -30,7 +30,7 @@ Only ledger figures. The template works out profit (`money_in - money_out`), the
 - opening cash + received - paid out - owner draw does not equal closing cash,
 - the content runs past one page.
 
-Placeholder text in square brackets, such as `[REVIEW LEAD NAME]`, prints highlighted in yellow so it can't go out unnoticed.
+Placeholder text in square brackets, such as `[CLIENT NAME]`, prints highlighted in yellow so it can't go out unnoticed.
 
 ## Wording rules
 
