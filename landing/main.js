@@ -587,6 +587,29 @@
     reveals.forEach(function (el) { ro.observe(el); });
   }
 
+  /* ---------- Footer: back to top, and a light that follows the pointer over the wordmark ---------- */
+  var toTop = $("[data-to-top]");
+  if (toTop) toTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: still() ? "auto" : "smooth" });
+    var first = $("[data-hero] a, [data-hero] button");
+    if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, still() ? 0 : 600);
+  });
+  var fmark = $("[data-footer-mark]");
+  if (fmark && window.matchMedia("(pointer: fine)").matches) {
+    var fword = fmark.firstElementChild, fraf = 0, fx = 0, fy = 0;
+    fmark.parentNode.addEventListener("pointermove", function (e) {
+      if (still()) return;
+      var r = fword.getBoundingClientRect();
+      fx = e.clientX - r.left; fy = e.clientY - r.top;
+      if (!fraf) fraf = requestAnimationFrame(function () {
+        fraf = 0;
+        fword.style.setProperty("--fx", fx + "px");
+        fword.style.setProperty("--fy", fy + "px");
+      });
+    });
+    fmark.parentNode.addEventListener("pointerleave", function () { fword.style.removeProperty("--fx"); fword.style.removeProperty("--fy"); });
+  }
+
   /* ---------- Copy the email address, for visitors with no email app ---------- */
   function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
@@ -619,7 +642,7 @@
   }
   $$("[data-copy]").forEach(bindCopy);
 
-  /* ---------- Get started form: opens a pre-filled email ---------- */
+  /* ---------- Get started form: sends straight to our inbox, no email app needed ---------- */
   var form = $("[data-form]");
   if (form) {
     var submit = $("[data-submit]", form);
@@ -640,31 +663,67 @@
       r.el.addEventListener("blur", function () { if (r.el.getAttribute("aria-invalid") === "true") check(r); });
       r.el.addEventListener("input", function () { if (r.el.getAttribute("aria-invalid") === "true") check(r); });
     });
+    var endpoint = form.getAttribute("data-endpoint");
+    var thanks = $("[data-form-thanks]", form);
+    var mailtoFor = function (data) {
+      var body = [
+        "Hi Easykeeps,", "", "I'd like to get started.", "",
+        "Name: " + data.name, "Business: " + data.business,
+        "Best way to reach me: " + data.contact, "Transactions a month: " + data.volume
+      ].join("\n");
+      return "mailto:hello@easykeeps.ca?subject=" + encodeURIComponent("Getting started with Easykeeps") + "&body=" + encodeURIComponent(body);
+    };
+    var showSent = function (data) {
+      $("[data-thanks-name]", thanks).textContent = data.name ? ", " + data.name.split(" ")[0] : "";
+      $("[data-thanks-contact]", thanks).textContent = data.contact;
+      form.classList.add("is-sent");
+      thanks.hidden = false;
+      thanks.focus();
+    };
+    /* If the send fails, the visitor still has two easy ways to reach us */
+    var showFallback = function (data) {
+      status.className = "form__done is-error";
+      status.innerHTML = "<p>That didn't go through. Please email us at <b>hello@easykeeps.ca</b> and we'll take it from there.</p>" +
+        "<div class=\"form__fallback\"><button type=\"button\" data-copy=\"hello@easykeeps.ca\"><span data-copy-label>Copy</span><span class=\"sr-only\"> email address</span></button>" +
+        "<a href=\"" + mailtoFor(data) + "\">Open my email app</a></div>";
+      bindCopy($("[data-copy]", status));
+    };
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       status.textContent = "";
+      status.className = "form__done";
       var bad = rules.filter(function (r) { return !check(r); });
       if (bad.length) { bad[0].el.focus(); return; }
+      var fd = new FormData(form);
+      if (fd.get("_honey")) return;
+      var data = {
+        name: String(fd.get("name")).trim(), business: String(fd.get("business")),
+        contact: String(fd.get("contact")).trim(), volume: String(fd.get("volume") || "Not sure")
+      };
       submit.classList.add("is-loading");
       submit.disabled = true;
-      var data = new FormData(form);
-      var body = [
-        "Hi Easykeeps,",
-        "",
-        "I'd like to get started.",
-        "",
-        "Name: " + data.get("name"),
-        "Business: " + data.get("business"),
-        "Best way to reach me: " + data.get("contact"),
-        "Transactions a month: " + (data.get("volume") || "Not sure")
-      ].join("\n");
-      var href = "mailto:hello@easykeeps.ca?subject=" + encodeURIComponent("Getting started with Easykeeps") + "&body=" + encodeURIComponent(body);
-      setTimeout(function () {
-        window.location.href = href;
-        submit.classList.remove("is-loading");
-        submit.disabled = false;
-        status.textContent = "Your email app should open with your details filled in. If it didn't, email us at hello@easykeeps.ca.";
-      }, still() ? 0 : 600);
+      var payload = {
+        "Name": data.name, "Business": data.business, "Best way to reach them": data.contact, "Transactions a month": data.volume,
+        _subject: "New Easykeeps enquiry from " + data.name, _template: "table", _captcha: "false", _honey: ""
+      };
+      if (/@/.test(data.contact)) payload._replyto = data.contact;
+      var done = function () { submit.classList.remove("is-loading"); submit.disabled = false; };
+      var ctrl = "AbortController" in window ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload),
+        signal: ctrl ? ctrl.signal : undefined
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (json) {
+          if (!res.ok || String(json.success) !== "true") throw new Error(json.message || "Send failed");
+        });
+      }).then(function () {
+        clearTimeout(timer); done(); showSent(data);
+      }).catch(function () {
+        clearTimeout(timer); done(); showFallback(data);
+      });
     });
   }
 
