@@ -603,8 +603,9 @@
 </section>
 
 <!-- 11. FINAL CALL TO ACTION + FOOTER -->
-<section class="final" id="start" aria-labelledby="final-title">
-  <div class="wrap final__grid">
+<section class="final" aria-labelledby="final-title">
+  <!-- "Get started" links land on the grid, not the section, so the form sits near the top of the screen -->
+  <div class="wrap final__grid" id="start">
     <div class="final__copy reveal">
       <h2 id="final-title">Let's get your books off your plate.</h2>
       <p>Tell us a little about your business and we'll get back to you. No email app needed.</p>
@@ -658,7 +659,7 @@
         <p>We'll get back to you at <b data-thanks-contact></b>. Nothing else to do for now.</p>
       </div>
     </form>
-    <div class="talk reveal" id="talk">
+    <div class="talk reveal" id="talk" tabindex="-1">
       <h3>Rather talk first?</h3>
       <ul class="talk__list">
         <li class="talk__row"><a class="talk__item" href="mailto:hello@easykeeps.ca"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.75"/><path class="draw" d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><small>Email</small>hello@easykeeps.ca</span></a><button class="talk__copy" type="button" data-copy="hello@easykeeps.ca"><span class="talk__copy-label" data-copy-label>Copy</span><span class="sr-only"> email address</span></button></li>
@@ -667,6 +668,24 @@
         <!-- WhatsApp: hidden until launch. Put the real number in the link and text, then remove the hidden attribute. -->
         <li hidden data-whatsapp><a class="talk__item" href="https://wa.me/11234567890"><span class="talk__icon"><svg width="22" height="22" aria-hidden="true" viewBox="0 0 24 24"><path class="draw" d="M4 18.5l1.2-3.6A7.8 7.8 0 1112 20a7.9 7.9 0 01-3.9-1z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><span><small>WhatsApp</small>123-456-7890</span></a></li>
       </ul>
+    </div>
+    <!-- What happens next. Step 1 fills in as the form is filled in, and turns into a tick once it is sent -->
+    <div class="next reveal" data-next>
+      <h3>What happens next</h3>
+      <ol class="next__list">
+        <li class="next__step is-current" data-next-step>
+          <span class="next__mark" aria-hidden="true"><svg class="next__ring" width="44" height="44" viewBox="0 0 44 44"><rect class="next__track" x="1" y="1" width="42" height="42" rx="13"/><rect class="next__fill" x="1" y="1" width="42" height="42" rx="13" pathLength="100" data-next-fill/></svg><span class="next__num">1</span><svg class="next__tick" width="22" height="22" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="next__txt"><strong>Send your details</strong>Use the form, or email us. It takes a minute.</span>
+        </li>
+        <li class="next__step" data-next-step>
+          <span class="next__mark" aria-hidden="true"><svg class="next__ring" width="44" height="44" viewBox="0 0 44 44"><rect class="next__track" x="1" y="1" width="42" height="42" rx="13"/></svg><span class="next__num">2</span><svg class="next__tick" width="22" height="22" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="next__txt"><strong>We get back to you</strong>By email or phone, to hear about your business.</span>
+        </li>
+        <li class="next__step" data-next-step>
+          <span class="next__mark" aria-hidden="true"><svg class="next__ring" width="44" height="44" viewBox="0 0 44 44"><rect class="next__track" x="1" y="1" width="42" height="42" rx="13"/></svg><span class="next__num">3</span><svg class="next__tick" width="22" height="22" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="next__txt"><strong>Your books get going</strong>We agree on a plan. Then you just snap receipts.</span>
+        </li>
+      </ol>
     </div>
   </div>
 

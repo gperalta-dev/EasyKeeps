@@ -549,13 +549,20 @@ button, input, select { font: inherit; color: inherit; }
 /* ---------- 8. Final CTA + footer ---------- */
 .final { background: var(--ink); color: var(--on-dark); padding-top: clamp(72px, 9vw, 120px); position: relative; overflow: hidden; isolation: isolate; }
 .final::before { content: ""; position: absolute; z-index: -1; width: 900px; height: 900px; right: -300px; top: -400px; background: radial-gradient(closest-side, rgba(47, 208, 143, .16), transparent); }
-.final__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); grid-template-rows: auto 1fr; gap: 0 clamp(32px, 6vw, 96px); align-items: start; }
+.final__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); grid-template-rows: auto auto 1fr; gap: 0 clamp(32px, 6vw, 96px); align-items: start; scroll-margin-top: clamp(16px, 2vw, 24px); }
 .final__copy { grid-column: 1; grid-row: 1; }
-.final .form { grid-column: 2; grid-row: 1 / span 2; }
+.final .form { grid-column: 2; grid-row: 1 / span 3; }
 .final .talk { grid-column: 1; grid-row: 2; }
-.final h2 { color: #fff; max-width: 14ch; }
+.final .next { grid-column: 1; grid-row: 3; }
+.final h2 { color: #fff; max-width: 20ch; text-wrap: balance; }
 .final__copy > p { margin-top: 18px; font-size: 1.15rem; color: var(--on-dark-2); max-width: 42ch; }
-.talk { margin-top: 44px; }
+.talk { margin-top: 36px; border-radius: 20px; scroll-margin-top: 28px; }
+.talk:focus { outline: none; }
+.talk:focus-visible { outline: 2px solid var(--mint); outline-offset: 10px; }
+/* "Talk to us" on wide screens: a soft ring around the options once the page arrives */
+.talk.is-flash .talk__item { animation: talk-flash 1.6s var(--ease) .45s both; }
+.talk.is-flash .talk__row + li .talk__item { animation-delay: .6s; }
+@keyframes talk-flash { 0%, 100% { box-shadow: 0 0 0 0 rgba(47, 208, 143, 0); } 30% { box-shadow: 0 0 0 2px rgba(47, 208, 143, .85), 0 0 24px rgba(47, 208, 143, .25); } }
 .talk h3 { font-size: 1.25rem; color: #fff; margin-bottom: 14px; }
 .talk__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: 420px; }
 .talk__item { display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 10px 16px 10px 10px; border-radius: 16px; background: rgba(255, 255, 255, .05); text-decoration: none; color: #fff; font-weight: 600; transition: background-color .25s, transform .25s var(--ease); }
@@ -577,6 +584,45 @@ a.talk__item:active { transform: scale(.98); }
 .talk__copy:active { transform: translateY(-50%) scale(.95); }
 .talk__copy.is-copied { background: var(--mint); border-color: var(--mint); color: var(--ink); }
 .talk__copy.is-copied .talk__copy-label { animation: chip-pop .35s var(--ease); }
+
+/* What happens next: three steps beside the form. Step 1 fills as the form is filled, then ticks when sent */
+.next { margin-top: 36px; }
+.next h3 { font-size: 1.25rem; color: #fff; margin-bottom: 18px; }
+.next__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; max-width: 520px; }
+.next__step { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; align-items: start; }
+/* The line between steps draws in, then a soft light runs down it from step to step */
+.next__step:not(:last-child)::before {
+  content: ""; position: absolute; left: 21px; top: 46px; bottom: -20px; width: 2px; border-radius: 2px;
+  background: linear-gradient(rgba(47, 208, 143, 0), var(--mint), rgba(47, 208, 143, 0)) 0 -40px / 100% 40px no-repeat, rgba(255, 255, 255, .12);
+  transform-origin: top; transition: transform .6s var(--ease) .4s; animation: next-run 3.6s ease-in-out 1.2s infinite;
+}
+.next__step:nth-child(2)::before { transition-delay: .9s; animation-delay: 2.1s; }
+.js .next:not(.is-in) .next__step::before { transform: scaleY(0); }
+@keyframes next-run { 0% { background-position: 0 -40px, 0 0; } 25%, 100% { background-position: 0 calc(100% + 40px), 0 0; } }
+.next__mark { position: relative; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; background: var(--ink); transition: transform .4s var(--ease), background-color .3s; }
+.next__ring { position: absolute; inset: 0; overflow: visible; }
+.next__track { fill: rgba(255, 255, 255, .04); stroke: rgba(255, 255, 255, .16); stroke-width: 2; transition: stroke .3s; }
+.next__fill { fill: none; stroke: var(--mint); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .6s var(--ease); }
+.next__num { font: 800 1.1rem/1 var(--font-display); color: var(--on-dark-2); transition: color .3s, transform .3s var(--ease); }
+.next__tick { position: absolute; color: var(--ink); opacity: 0; }
+.next__tick path { stroke-dasharray: 24; stroke-dashoffset: 24; }
+.next__txt { padding-top: 1px; color: var(--on-dark-2); line-height: 1.5; }
+.next__txt strong { display: block; color: #fff; font-size: 1.0625rem; margin-bottom: 2px; }
+.next__step.is-current .next__track { stroke: rgba(47, 208, 143, .35); }
+.next__step.is-current .next__num { color: #fff; }
+.next__step.is-current .next__mark::after { content: ""; position: absolute; inset: 0; border-radius: inherit; animation: next-pulse 2.4s ease-out infinite; }
+@keyframes next-pulse { 0% { box-shadow: 0 0 0 0 rgba(47, 208, 143, .4); } 70%, 100% { box-shadow: 0 0 0 12px rgba(47, 208, 143, 0); } }
+.next__step.is-ready .next__mark { background: rgba(47, 208, 143, .16); }
+.next__step.is-ready .next__num { color: var(--mint); transform: scale(1.1); }
+.next__step.is-done .next__mark { background: var(--mint); }
+.next__step.is-done .next__track, .next__step.is-done .next__fill { stroke: var(--mint); }
+.next__step.is-done .next__num { opacity: 0; }
+.next__step.is-done .next__tick { opacity: 1; }
+.next__step.is-done .next__tick path { animation: draw-on .45s .15s var(--ease) forwards; }
+@media (hover: hover) {
+  .next__step:hover .next__mark { transform: rotate(-8deg); }
+  .next__step:hover .next__track { stroke: rgba(47, 208, 143, .6); }
+}
 
 .form { background: var(--card); color: var(--ink); border-radius: 24px; padding: clamp(24px, 3vw, 36px); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .5); display: grid; gap: 18px; }
 .form h3 { font-size: 1.6rem; font-weight: 800; }
@@ -655,8 +701,8 @@ a.talk__item:active { transform: scale(.98); }
   .scene__cap strong { color: var(--mint); }
   .scene--snap .toast { bottom: auto; top: 40%; }
   .final__grid { row-gap: 32px; }
-  .final__copy, .final .form, .final .talk { grid-column: 1; grid-row: auto; }
-  .final .talk { margin-top: 8px; }
+  .final__copy, .final .form, .final .talk, .final .next { grid-column: 1; grid-row: auto; }
+  .final .talk, .final .next { margin-top: 8px; }
   .faq__side { position: static; }
   .reviews__grid { grid-template-columns: 1fr 1fr; }
   .review--feature { grid-column: 1 / -1; grid-row: auto; }
@@ -1322,3 +1368,11 @@ html.a11y-still .story__bg.is-on { animation: none; }
 html.a11y-still .footer::before { animation: none; background-image: none; }
 html.a11y-still .footer__ping::after { display: none; }
 html.a11y-still .form__thanks-mark circle, html.a11y-still .form__thanks-mark path { animation: none; stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .next .next__step:not(:last-child)::before, .next__step.is-current .next__mark::after, .talk.is-flash .talk__item { animation: none; }
+  .js .next:not(.is-in) .next__step::before { transform: none; }
+  .next__step.is-done .next__tick path { animation: none; stroke-dashoffset: 0; }
+}
+html.a11y-still .next .next__step:not(:last-child)::before, html.a11y-still .next__step.is-current .next__mark::after, html.a11y-still .talk.is-flash .talk__item { animation: none; }
+html.a11y-still.js .next:not(.is-in) .next__step::before { transform: none; }
+html.a11y-still .next__step.is-done .next__tick path { animation: none; stroke-dashoffset: 0; }

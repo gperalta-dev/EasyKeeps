@@ -40,6 +40,7 @@ The photo story uses stock photos, free under the Unsplash License (no attributi
 - Phone: shows the placeholder 123-456-7890 (not tappable) until the business line is ready. Swap in the real number in "Rather talk first?" and the footer, as a `tel:` link.
 - WhatsApp ("Rather talk first?"): hidden until launch, with the placeholder number. Put the real number in the `wa.me` link and text, then remove the `hidden` attribute on the `data-whatsapp` line.
 - Email row has a Copy button for visitors who have no email app set up.
+- "What happens next" (beside the form) is three short steps. Step 1 fills in as the form is filled and turns into a tick once it is sent. On wide screens, "Talk to us" scrolls to the whole contact section instead of jumping past the form.
 - Get started form: posts to FormSubmit (`data-endpoint` on the form), which emails each enquiry to hello@easykeeps.ca. FormSubmit needs a one-time activation: send the form once yourself, then click "Activate Form" in the email FormSubmit sends to hello@easykeeps.ca. Until then, and whenever a send fails, the visitor sees the email address with a Copy button and an "Open my email app" link. A hidden `_honey` field catches spam bots.
 - Footer: four columns (brand, Explore, Contact, Ready when you are), a giant flowing Easykeeps wordmark (a light follows the pointer on PC), and Back to top.
 - `[STREET ADDRESS]`: the footer.
