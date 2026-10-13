@@ -1,0 +1,36 @@
+# Temporary: downloads candidate stock photos so they can be reviewed. Deleted after use.
+name: Fetch candidate photos
+on:
+  push:
+    branches: [photo-fetch]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    if: "!contains(github.event.head_commit.message, '[skip fetch]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download
+        run: |
+          mkdir -p photos
+          while read -r name id; do
+            curl -fsSL "https://images.unsplash.com/${id}?fm=jpg&q=80&w=1600" -o "photos/${name}.jpg" || echo "failed ${name}"
+          done <<'LIST'
+a photo-1654263736203-a289f57c0d82
+b photo-1687422808248-f807f4ea2a2e
+c photo-1687293233471-187c8df1beef
+d photo-1753351052363-53ce102830eb
+e photo-1671109707550-8b27d99cd2bd
+f photo-1594392175511-30eca83d51c8
+g photo-1758887261865-a2b89c0f7ac5
+h photo-1687293233211-6b0cc3beba70
+LIST
+          ls -la photos
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add photos
+          git commit -m "Add candidate photos [skip fetch]"
+          git push
