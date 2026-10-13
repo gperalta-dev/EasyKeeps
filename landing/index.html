@@ -606,10 +606,11 @@
   <div class="wrap final__grid">
     <div class="final__copy reveal">
       <h2 id="final-title">Let's get your books off your plate.</h2>
-      <p>Tell us a little about your business and we'll get back to you by email.</p>
+      <p>Tell us a little about your business and we'll get back to you. No email app needed.</p>
     </div>
 
-    <form class="form reveal" data-form novalidate>
+    <!-- The form posts to FormSubmit, which emails each one to hello@easykeeps.ca. Swap data-endpoint to change services. -->
+    <form class="form reveal" data-form data-endpoint="https://formsubmit.co/ajax/hello@easykeeps.ca" novalidate>
       <h3>Get started</h3>
       <div class="field">
         <label for="f-name">Your name</label>
@@ -643,11 +644,18 @@
           <label><input type="radio" name="volume" value="Not sure" checked><span>Not sure</span></label>
         </div>
       </fieldset>
+      <div class="form__hp" aria-hidden="true"><label for="f-hp">Leave this empty</label><input id="f-hp" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
       <button class="btn btn--primary btn--block btn--lg" type="submit" data-submit>
         <span class="btn__label">Get started</span>
         <span class="btn__loading" aria-hidden="true"><i></i><i></i><i></i></span>
       </button>
-      <p class="form__done" role="status" data-form-status></p>
+      <p class="form__note">We only use this to get back to you.</p>
+      <div class="form__done" role="status" data-form-status></div>
+      <div class="form__thanks" data-form-thanks hidden tabindex="-1">
+        <svg class="form__thanks-mark" width="64" height="64" aria-hidden="true" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="3"/><path d="M19 33.5l9 9 17-19" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Thanks<span data-thanks-name></span>. We have your details.</h3>
+        <p>We'll get back to you at <b data-thanks-contact></b>. Nothing else to do for now.</p>
+      </div>
     </form>
     <div class="talk reveal" id="talk">
       <h3>Rather talk first?</h3>
@@ -662,26 +670,40 @@
   </div>
 
   <footer class="footer">
-    <div class="wrap footer__grid">
+    <div class="wrap footer__top">
       <div class="footer__brand">
-        <span class="brand brand--light">
+        <a class="brand brand--light" href="#top" aria-label="Easykeeps, back to top">
           <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#087A56"/><rect class="bar bar--top" x="8" y="10" width="11" height="4" rx="2" fill="#2FD08F"/><rect class="bar bar--bottom" x="8" y="18" width="16" height="4" rx="2" fill="#FDFEFE"/></svg>
           <span class="brand__word" translate="no">Easykeeps</span>
-        </span>
+        </a>
         <p class="footer__motto">Balance on easy.</p>
+        <p class="footer__place"><span class="footer__ping" aria-hidden="true"></span>Based in Edmonton, AB</p>
       </div>
-      <nav class="footer__nav" aria-label="Footer">
-        <a href="#how">How it works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#faq">FAQ</a>
+      <nav class="footer__col" aria-labelledby="ft-explore">
+        <h2 class="footer__h" id="ft-explore">Explore</h2>
+        <a class="footer__link" href="#how">How it works</a>
+        <a class="footer__link" href="#insight">Your report</a>
+        <a class="footer__link" href="#pricing">Pricing</a>
+        <a class="footer__link" href="#reviews">Reviews</a>
+        <a class="footer__link" href="#faq">FAQ</a>
       </nav>
-      <address class="footer__contact">
-        <a href="mailto:hello@easykeeps.ca">hello@easykeeps.ca</a>
+      <address class="footer__col footer__contact">
+        <h2 class="footer__h">Contact</h2>
+        <a class="footer__link" href="mailto:hello@easykeeps.ca">hello@easykeeps.ca</a>
+        <!-- Phone: placeholder until the business line is ready -->
         <span>Phone: 123-456-7890</span>
         <span>[STREET ADDRESS], Edmonton, AB</span>
       </address>
+      <div class="footer__col footer__cta">
+        <h2 class="footer__h">Ready when you are</h2>
+        <p>Monthly books, checked by a person.</p>
+        <a class="btn btn--primary" href="#start">Get started</a>
+        <button class="footer__top-btn" type="button" data-to-top>
+          <span class="footer__top-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Back to top
+        </button>
+      </div>
     </div>
+    <div class="footer__mark reveal" aria-hidden="true" data-footer-mark><span translate="no">Easykeeps</span></div>
     <div class="wrap footer__legal">
       <p>Easykeeps is a bookkeeping service, not a CPA firm. We don't provide audit, review or compilation engagements or tax advice.</p>
       <p>&copy; 2026 Easykeeps. easykeeps.ca</p>
