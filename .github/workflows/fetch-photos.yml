@@ -14,17 +14,15 @@ jobs:
       - name: Download
         run: |
           mkdir -p photos
-          while read -r name id; do
-            curl -fsSL "https://images.unsplash.com/${id}?fm=jpg&q=80&w=1600" -o "photos/${name}.jpg" || echo "failed ${name}"
+          while read -r name id w; do
+            curl -fsSL "https://images.unsplash.com/${id}?fm=jpg&q=78&w=${w}" -o "photos/${name}.jpg" || echo "failed ${name}"
           done <<'LIST'
-          a photo-1654263736203-a289f57c0d82
-          b photo-1687422808248-f807f4ea2a2e
-          c photo-1687293233471-187c8df1beef
-          d photo-1753351052363-53ce102830eb
-          e photo-1671109707550-8b27d99cd2bd
-          f photo-1594392175511-30eca83d51c8
-          g photo-1758887261865-a2b89c0f7ac5
-          h photo-1687293233211-6b0cc3beba70
+          hero-owner-with-receipts photo-1687422808248-f807f4ea2a2e 2400
+          hero-owner-with-receipts-mobile photo-1687293233211-6b0cc3beba70 1200
+          story-receipt photo-1654263736203-a289f57c0d82 1400
+          story-owner-at-laptop photo-1687293233471-187c8df1beef 2200
+          story-cafe-owner photo-1753351052363-53ce102830eb 2200
+          story-shop-owner photo-1758887261865-a2b89c0f7ac5 2200
           LIST
           ls -la photos
       - name: Commit
