@@ -168,7 +168,9 @@ button, input, select { font: inherit; color: inherit; }
 .eyebrow--light { color: var(--mint); }
 
 /* ---------- 1. Hero ---------- */
-.hero { position: relative; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; color: #fff; overflow: hidden; isolation: isolate; background: var(--ink); }
+/* Phone browsers grow and shrink their address bar while scrolling. Heights use the
+   stable small (svh) or large (lvh) viewport, never dvh, so nothing jumps when it does. */
+.hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; color: #fff; overflow: hidden; isolation: isolate; background: var(--ink); }
 .hero__scrim { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(95deg, rgba(14, 28, 43, .96) 0%, rgba(14, 28, 43, .88) 34%, rgba(14, 28, 43, .35) 60%, rgba(14, 28, 43, .1) 100%), linear-gradient(0deg, rgba(14, 28, 43, .7), transparent 28%), linear-gradient(180deg, rgba(14, 28, 43, .78), transparent 20%); }
 .hero__inner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 440px; align-items: center; gap: 48px; padding-top: calc(var(--nav-h) + 24px); padding-bottom: 48px; }
 .hero__copy { max-width: 680px; }
@@ -265,7 +267,7 @@ button, input, select { font: inherit; color: inherit; }
 .how__intro { margin-bottom: 8px; }
 .how__intro h2 { font-size: clamp(2rem, 1.35rem + 2.4vw, 3.25rem); font-weight: 800; max-width: 18ch; }
 .how__track { position: relative; height: 260vh; --step: 53.33vh; }
-.how__pin { position: sticky; top: 0; height: 100vh; height: 100dvh; display: flex; align-items: center; padding-top: var(--nav-h); }
+.how__pin { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; align-items: center; padding-top: var(--nav-h); }
 .how__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 56px); align-items: center; }
 .how__side { position: relative; padding-left: 26px; }
 .how__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -562,6 +564,19 @@ a.talk__item:active { transform: scale(.98); }
 .talk__item small { display: block; color: var(--on-dark-2); font-weight: 500; font-size: .9rem; }
 .talk__item--ph { color: var(--amber); }
 .talk__icon { width: 44px; height: 44px; flex: none; border-radius: 12px; display: grid; place-items: center; background: rgba(47, 208, 143, .14); color: var(--mint); }
+/* Email row: a Copy button for visitors who have no email app set up */
+.talk__row { position: relative; }
+.talk__row .talk__item { padding-right: 104px; }
+.talk__copy {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%); min-height: 44px; min-width: 80px; padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .24); background: rgba(255, 255, 255, .06); color: #fff; font: 700 .95rem/1 var(--font-body);
+  transition: background-color .2s, border-color .2s, color .2s, transform .2s var(--ease);
+}
+.talk__copy:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .45); }
+.talk__copy:active { transform: translateY(-50%) scale(.95); }
+.talk__copy.is-copied { background: var(--mint); border-color: var(--mint); color: var(--ink); }
+.talk__copy.is-copied .talk__copy-label { animation: chip-pop .35s var(--ease); }
 
 .form { background: var(--card); color: var(--ink); border-radius: 24px; padding: clamp(24px, 3vw, 36px); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .5); display: grid; gap: 18px; }
 .form h3 { font-size: 1.6rem; font-weight: 800; }
@@ -691,7 +706,7 @@ a.talk__item:active { transform: scale(.98); }
 
   .stage { padding: 48px 12px 16px; border-radius: 24px; }
   .phone { width: 210px; padding: 10px; border-radius: 34px; }
-  .phone__screen { height: min(340px, calc(100dvh - 400px)); min-height: 250px; border-radius: 26px; }
+  .phone__screen { height: min(340px, calc(100vh - 400px)); height: min(340px, calc(100svh - 400px)); min-height: 250px; border-radius: 26px; }
   .phone__shutter { inset: 10px; border-radius: 26px; }
   .ledger__row { grid-template-columns: auto 1fr auto; grid-template-areas: "what what amt" "cat flags flags"; padding: 10px 12px; }
   .ledger__flags { flex-wrap: nowrap; }
@@ -816,6 +831,11 @@ a.talk__item:active { transform: scale(.98); }
 .wm__icon { width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; }
 .wm__icon--bank { background: var(--mint-soft); color: var(--green); }
 .wm__icon--soft { background: var(--blue-soft); color: var(--blue); }
+/* Official marks: shown as supplied, in their own colour, never animated or recoloured */
+.wm__icon--logo { background: none; }
+.wm__icon--qb { color: #2CA01C; }
+.wm__icon--xero { color: #13B5EA; }
+.wm:hover .wm__icon--logo svg { animation: none; }
 .wm:hover .wm__icon svg { animation: wiggle .5s var(--ease); }
 @keyframes wiggle { 30% { transform: rotate(-10deg) scale(1.1); } 60% { transform: rotate(6deg); } }
 .wm__name { white-space: nowrap; font-family: var(--font-display); font-size: 1.2rem; letter-spacing: -.01em; }
@@ -842,7 +862,7 @@ a.talk__item:active { transform: scale(.98); }
 
 /* ---------- Story: pinned photo, words scroll over it ---------- */
 .story { position: relative; background: var(--ink); color: #fff; }
-.story__pin { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; }
+.story__pin { position: sticky; top: 0; height: 100vh; height: 100lvh; overflow: hidden; }
 .story__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.12); transition: opacity 1s var(--ease), transform 6s ease-out; }
 .story__bg.is-on { opacity: 1; transform: scale(1.02); }
 .story__bg[data-bg="0"] { object-position: 62% 30%; }
@@ -852,8 +872,8 @@ a.talk__item:active { transform: scale(.98); }
 .story__dots { position: absolute; right: var(--gutter); top: 50%; display: grid; gap: 10px; transform: translateY(-50%); }
 .story__dots i { width: 8px; height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .4); transition: height .5s var(--ease), background-color .3s; }
 .story__dots i.is-on { height: 32px; background: var(--mint); }
-.story__panels { position: relative; margin-top: -100vh; margin-top: -100dvh; }
-.story__panel { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; padding: var(--nav-h) var(--gutter) 0; max-width: 1240px; margin: 0 auto; }
+.story__panels { position: relative; margin-top: -100vh; margin-top: -100lvh; }
+.story__panel { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: var(--nav-h) var(--gutter) 0; max-width: 1240px; margin: 0 auto; }
 .story__panel--right { justify-content: flex-end; }
 .story__card {
   max-width: 500px; padding: clamp(24px, 3vw, 36px); border-radius: 24px;
@@ -1054,6 +1074,7 @@ html.a11y-still .scroll-progress { display: none; }
 .wcol--3 { margin-top: -40px; }
 .wcol--4 { margin-top: -180px; }
 .wcol__inner { display: flex; flex-direction: column; will-change: transform; }
+.hero.is-off .hero__wall *, .hero.is-off .hero__wall *::before, .hero.is-off .hero__wall *::after { animation-play-state: paused; }
 .wcol__inner > * { margin-bottom: 22px; }
 .wcol--up .wcol__inner { animation: wall-up 70s linear infinite; }
 .wcol--down .wcol__inner { animation: wall-down 84s linear infinite; }

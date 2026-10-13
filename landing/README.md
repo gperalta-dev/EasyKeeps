@@ -37,9 +37,11 @@ The photo story uses stock photos, free under the Unsplash License (no attributi
 
 - `[REVIEW LEAD NAME]` and `[AUTOMATION LEAD NAME]`: the name chips and the photo's alt text in "Checked by a real person".
 - `[CLIENT QUOTE]`, `[CLIENT NAME]`, `[BUSINESS NAME]`, `[TYPE OF BUSINESS]`: three review cards. Remove the "Placeholder" tags and the "Placeholder cards" note when real reviews go in.
-- WhatsApp ("Rather talk first?"): uses the same number as the phone (wa.me/11234567890) and is hidden until launch. Remove the `hidden` attribute on the `data-whatsapp` line to show it.
+- Phone: shows the placeholder 123-456-7890 (not tappable) until the business line is ready. Swap in the real number in "Rather talk first?" and the footer, as a `tel:` link.
+- WhatsApp ("Rather talk first?"): hidden until launch, with the placeholder number. Put the real number in the `wa.me` link and text, then remove the `hidden` attribute on the `data-whatsapp` line.
+- Email row has a Copy button for visitors who have no email app set up.
 - `[STREET ADDRESS]`: the footer.
-- "Works with your bank and software" strip: bank and software names as styled text, not official logos, with a not-affiliated note. Official logos would need each company's permission.
+- "Works with your bank and software" strip: QuickBooks and Xero show their official marks, unaltered, in their own brand colour (the single-colour versions from Simple Icons, which takes them from design.intuit.com/quickbooks/brand and xero.com/uk/about/media/downloads). The banks still show a generic bank icon with their name until their official logo files are added. Under the strip: "Logos are trademarks of their owners. Easykeeps is not affiliated with or endorsed by them."
 - `[ANNUAL PRICE]` (three plans): shown when someone picks "Annual". Also remove the "Annual price to be confirmed" notes.
 - Hero rating line (`[RATING] from [N] Google reviews`): hidden for now. Fill it in and remove the `hidden` attribute once there are real Google reviews.
 
