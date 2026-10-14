@@ -719,7 +719,7 @@ a.talk__item:active { transform: scale(.98); }
 
   /* Hero: separate mobile layout, text anchored low over a portrait photo */
   .hero { align-items: flex-end; }
-  .hero__scrim { background: linear-gradient(0deg, rgba(14, 28, 43, .98) 0%, rgba(14, 28, 43, .92) 48%, rgba(14, 28, 43, .3) 72%, rgba(14, 28, 43, .5) 88%, rgba(14, 28, 43, .85) 100%); }
+  .hero__scrim { background: linear-gradient(0deg, rgba(14, 28, 43, .97) 0%, rgba(14, 28, 43, .9) 44%, rgba(14, 28, 43, .45) 60%, rgba(14, 28, 43, .1) 74%, rgba(14, 28, 43, .2) 88%, rgba(14, 28, 43, .8) 100%); }
   .hero__inner { padding-top: calc(var(--nav-h) + 24px); padding-bottom: 32px; }
   .hero__title { font-size: clamp(2.35rem, 9.5vw, 2.9rem); }
   .hero__sub { font-size: 1.0625rem; margin-top: 16px; }
@@ -1266,9 +1266,9 @@ html.a11y-still .hero__wall { transition: none; }
 @media (max-width: 767px) {
   .phone__shot { inset: 10px; border-radius: 26px; }
   /* No pointer to lean the hero wall on phones, so its columns travel faster */
-  .wcol--up .wcol__inner { animation-duration: 40s; }
-  .wcol--down .wcol__inner { animation-duration: 48s; }
-  .wcol--3 .wcol__inner { animation-duration: 34s; }
+  .wcol--up .wcol__inner { animation-duration: 22s; }
+  .wcol--down .wcol__inner { animation-duration: 27s; }
+  .wcol--3 .wcol__inner { animation-duration: 19s; }
 }
 
 /* Still mode: every loop above settles on a calm, complete frame */
@@ -1397,8 +1397,12 @@ html.a11y-still .next__step.is-done .next__tick path { animation: none; stroke-d
   .hero__wall {
     transform: translate3d(0, calc(var(--sy, 0) * .3px), 0) perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(calc(10deg + var(--sy, 0) * .012deg));
     transition: transform .3s linear;
+    -webkit-mask-image: none; mask-image: none;
+    animation: wall-sway 9s ease-in-out infinite alternate;
   }
+  .hero.is-off .hero__wall { animation-play-state: paused; }
 }
+@keyframes wall-sway { from { translate: -14px 6px; rotate: -1.5deg; } to { translate: 14px -10px; rotate: 1.5deg; } }
 /* Touch screens have no hover, so the hover effects play as each item scrolls into view */
 @media (hover: none) {
   .trust__item.is-live .icon-tile { transform: rotate(-6deg) scale(1.06); }
@@ -1417,10 +1421,12 @@ html.a11y-still .next__step.is-done .next__tick path { animation: none; stroke-d
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-visual { translate: none; }
+  .hero__wall { animation: none; translate: none; rotate: none; }
   .hero__wall { transform: perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(10deg); }
 }
 @media (prefers-reduced-motion: reduce) and (min-width: 768px) {
   .hero__wall { transform: perspective(1800px) rotateX(24deg) rotateY(-14deg) rotateZ(10deg); }
 }
 html.a11y-still .hero-visual { translate: none; }
+html.a11y-still .hero__wall { animation: none; translate: none; rotate: none; }
 @media (max-width: 767px) { html.a11y-still .hero__wall { transform: perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(10deg); } }
