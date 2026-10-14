@@ -129,6 +129,20 @@
     });
   }
 
+  /* Touch screens: no pointer to lean toward, so the wall and money chips drift as the page scrolls */
+  var touchMQ = window.matchMedia("(hover: none)");
+  if (hero && touchMQ.matches) {
+    var sraf = 0, lastSy = -1;
+    window.addEventListener("scroll", function () {
+      if (sraf || still()) return;
+      sraf = requestAnimationFrame(function () {
+        sraf = 0;
+        var y = Math.round(Math.min(window.scrollY, hero.offsetHeight));
+        if (y !== lastSy) { lastSy = y; hero.style.setProperty("--sy", y); }
+      });
+    }, { passive: true });
+  }
+
   /* Pause the wall while the hero is off screen, so scrolling stays smooth on phones */
   if (hero && wall) onVisible(hero, function (v) { hero.classList.toggle("is-off", !v); }, { threshold: 0 });
 
@@ -594,6 +608,14 @@
     var first = $("[data-hero] a, [data-hero] button");
     if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, still() ? 0 : 600);
   });
+  /* Touch screens: hover effects play as each item scrolls into view, and replay when it comes back */
+  if (touchMQ.matches && hasIO) {
+    var liveIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle("is-live", e.isIntersecting && !still()); });
+    }, { threshold: 0.5, rootMargin: "-8% 0px -18% 0px" });
+    $$(".trust__item, .talk__item, .name-chip, .plan, .next__step").forEach(function (el) { liveIO.observe(el); });
+  }
+
   var fmark = $("[data-footer-mark]");
   if (fmark && window.matchMedia("(pointer: fine)").matches) {
     var fword = fmark.firstElementChild, fraf = 0, fx = 0, fy = 0;
@@ -608,6 +630,25 @@
       });
     });
     fmark.parentNode.addEventListener("pointerleave", function () { fword.style.removeProperty("--fx"); fword.style.removeProperty("--fy"); });
+  }
+  /* Touch screens: the light drifts across the wordmark on its own while it is on screen */
+  if (fmark && touchMQ.matches) {
+    var tword = fmark.firstElementChild, tOn = false, tLast = 0;
+    var drift = function (now) {
+      if (!tOn) return;
+      if (!still() && now - tLast > 33) {
+        tLast = now;
+        var w = tword.offsetWidth, h = tword.offsetHeight;
+        tword.style.setProperty("--fx", Math.round(w * (0.5 + 0.45 * Math.sin(now / 2400))) + "px");
+        tword.style.setProperty("--fy", Math.round(h * (0.5 + 0.3 * Math.sin(now / 1500))) + "px");
+      }
+      requestAnimationFrame(drift);
+    };
+    onVisible(fmark, function (v) {
+      var was = tOn; tOn = v;
+      if (v && !was) requestAnimationFrame(drift);
+      if (!v) { tword.style.removeProperty("--fx"); tword.style.removeProperty("--fy"); }
+    }, { threshold: 0 });
   }
 
   /* ---------- "Talk to us": on wide screens the options sit beside the form, so show the whole
