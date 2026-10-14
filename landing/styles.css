@@ -520,7 +520,8 @@ button, input, select { font: inherit; color: inherit; }
 .feats--dark .f--coral b { color: #FF8B73; }
 .feats--dark .f--blue b { color: #8FAEFF; }
 .feats--dark li:hover { background: rgba(255, 255, 255, .06) !important; }
-.feats__all { font-weight: 700; color: #fff !important; }
+.feats__all { font-weight: 700; color: var(--ink); }
+.feats--dark .feats__all { color: #fff; }
 
 .fine { margin: 40px auto 0; max-width: 820px; text-align: center; color: var(--slate); font-size: .95rem; }
 
