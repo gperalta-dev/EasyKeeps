@@ -1377,3 +1377,50 @@ html.a11y-still .form__thanks-mark circle, html.a11y-still .form__thanks-mark pa
 html.a11y-still .next .next__step:not(:last-child)::before, html.a11y-still .next__step.is-current .next__mark::after, html.a11y-still .talk.is-flash .talk__item { animation: none; }
 html.a11y-still.js .next:not(.is-in) .next__step::before { transform: none; }
 html.a11y-still .next__step.is-done .next__tick path { animation: none; stroke-dashoffset: 0; }
+
+/* ---------- Phones and touch screens: the desktop motion, adapted ---------- */
+/* Hero: the two money chips float above the words, and the wall drifts as the page scrolls */
+@media (max-width: 767px) and (min-height: 660px) {
+  .hero-visual {
+    display: block; position: absolute; left: var(--gutter); right: var(--gutter); justify-self: stretch; bottom: calc(100% - var(--nav-h) - 12px); height: 92px; padding: 0;
+    pointer-events: none; translate: 0 calc(var(--sy, 0) * -.35px);
+  }
+  .hero-visual .hero-card { display: none; }
+  .float-chip--balance { top: 0; left: 0; width: 162px; padding: 8px 14px 4px; gap: 0; }
+  .float-chip--gst { top: 22px; right: 0; left: auto; padding: 10px 14px 10px 10px; }
+  .float-chip__label { font-size: 1rem; }
+  .float-chip__value { font-size: 1.3rem; }
+  .float-chip__value--sm { font-size: 1.15rem; }
+  .float-chip--balance .spark { height: 18px; margin-top: 2px; }
+}
+@media (max-width: 767px) {
+  .hero__wall {
+    transform: translate3d(0, calc(var(--sy, 0) * .3px), 0) perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(calc(10deg + var(--sy, 0) * .012deg));
+    transition: transform .3s linear;
+  }
+}
+/* Touch screens have no hover, so the hover effects play as each item scrolls into view */
+@media (hover: none) {
+  .trust__item.is-live .icon-tile { transform: rotate(-6deg) scale(1.06); }
+  .trust__item.is-live .draw, .talk__item.is-live .draw { animation: redraw .9s .15s var(--ease) both; }
+  .trust__item.is-live .pop { animation: pop .5s .4s var(--ease); transform-origin: 12px 10px; transform-box: view-box; }
+  .name-chip { transition: transform .5s var(--ease); }
+  .name-chip.is-live { transform: translateY(-4px) rotate(-1deg); }
+  .plan--established.is-live .plan__shine { transform: rotate(12deg) translateX(520%); transition-delay: .2s; }
+  .next__step .next__mark { transition-delay: .1s; }
+  .next__step.is-live .next__mark { transform: rotate(-8deg); }
+  .next__step.is-live .next__track { stroke: rgba(47, 208, 143, .6); }
+  .feats li { transition: background-color .4s, transform .4s var(--ease); }
+  .plan.is-live .feats li { transform: translateX(3px); }
+  .plan.is-live .feats li:nth-child(2) { transition-delay: .08s; } .plan.is-live .feats li:nth-child(3) { transition-delay: .16s; }
+  .plan.is-live .feats li:nth-child(4) { transition-delay: .24s; } .plan.is-live .feats li:nth-child(5) { transition-delay: .32s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual { translate: none; }
+  .hero__wall { transform: perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(10deg); }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 768px) {
+  .hero__wall { transform: perspective(1800px) rotateX(24deg) rotateY(-14deg) rotateZ(10deg); }
+}
+html.a11y-still .hero-visual { translate: none; }
+@media (max-width: 767px) { html.a11y-still .hero__wall { transform: perspective(1400px) rotateX(22deg) rotateY(-10deg) rotateZ(10deg); } }
