@@ -695,6 +695,13 @@
       steps[0].classList.toggle("is-ready", n === rules.length);
     };
     form.addEventListener("input", progress);
+    /* "Get started" on a plan card picks that plan in the form */
+    $$("[data-pick-plan]").forEach(function (a) {
+      a.addEventListener("click", function () {
+        var pick = $('input[name="plan"][value="' + a.getAttribute("data-pick-plan") + '"]', form);
+        if (pick) pick.checked = true;
+      });
+    });
     form.addEventListener("change", progress);
     progress();
     var endpoint = form.getAttribute("data-endpoint");
@@ -703,7 +710,7 @@
       var body = [
         "Hi Easykeeps,", "", "I'd like to get started.", "",
         "Name: " + data.name, "Business: " + data.business,
-        "Best way to reach me: " + data.contact, "Transactions a month: " + data.volume
+        "Best way to reach me: " + data.contact, "Plan: " + data.plan
       ].join("\n");
       return "mailto:hello@easykeeps.ca?subject=" + encodeURIComponent("Getting started with Easykeeps") + "&body=" + encodeURIComponent(body);
     };
@@ -737,12 +744,12 @@
       if (fd.get("_honey")) return;
       var data = {
         name: String(fd.get("name")).trim(), business: String(fd.get("business")),
-        contact: String(fd.get("contact")).trim(), volume: String(fd.get("volume") || "Not sure")
+        contact: String(fd.get("contact")).trim(), plan: String(fd.get("plan") || "Not sure")
       };
       submit.classList.add("is-loading");
       submit.disabled = true;
       var payload = {
-        "Name": data.name, "Business": data.business, "Best way to reach them": data.contact, "Transactions a month": data.volume,
+        "Name": data.name, "Business": data.business, "Best way to reach them": data.contact, "Plan": data.plan,
         _subject: "New Easykeeps enquiry from " + data.name, _template: "table", _captcha: "false", _honey: ""
       };
       if (/@/.test(data.contact)) payload._replyto = data.contact;
