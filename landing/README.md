@@ -52,7 +52,8 @@ The photo story uses stock photos, free under the Unsplash License (no attributi
 
 - Prices ($350, $550, from $850) are provisional, so the "Prices are provisional" tag is still showing.
 - "GST tracked every month" is listed on every plan. This comes from the original plan; check that it matches the partner's packages.
-- "Your report by the 20th when receipts arrive by the 5th" is the proposed service standard.
+- Reports follow each client's own month end ("Ready for your month end"), not a fixed calendar date.
+- Plans differ by services, not transaction count or number of accounts. The split (invoices and bills in Standard; GST returns, year-end files and chasing missing receipts in Established) is a proposal to confirm, along with the prices.
 - Established is marked "Opening soon", since the partner's guide says it's offered later.
 - The partner agrees to be named and pictured on the site.
 - The numbers in "How it works", the hero chips and the "See where your money goes" charts are made up for illustration and are labelled "Example" or "Sample numbers".
