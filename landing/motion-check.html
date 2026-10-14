@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Motion check | Easykeeps</title>
+<meta name="description" content="Checks whether this phone or computer is asking websites to switch off motion.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+  @font-face { font-family: "Schibsted Grotesk"; src: url("assets/fonts/schibstedgrotesk-latin.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+  @font-face { font-family: "Figtree"; src: url("assets/fonts/figtree-latin.woff2") format("woff2"); font-weight: 300 900; font-display: swap; }
+  :root { --ink: #0E1C2B; --paper: #F4F6F5; --card: #FDFEFE; --slate: #4A5B66; --green: #087A56; --mint: #2FD08F; --mint-soft: #E2F6EE; --coral-t: #C2391C; --coral-soft: #FDE7E2; --amber-t: #9A5B00; --amber-soft: #FDF1D8; --line: #DCE3E0; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.55 "Figtree", "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 32px 16px 48px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font: 800 1.2rem/1 "Schibsted Grotesk", Arial, sans-serif; color: var(--ink); text-decoration: none; }
+  .brand i { width: 30px; height: 30px; border-radius: 9px; background: var(--green); display: grid; place-items: center; }
+  .brand i::before { content: ""; width: 14px; height: 3px; border-radius: 2px; background: #fff; box-shadow: 0 6px 0 #fff; transform: translateY(-3px); }
+  h1 { font: 800 clamp(1.9rem, 7vw, 2.4rem)/1.1 "Schibsted Grotesk", Arial, sans-serif; letter-spacing: -.02em; margin: 28px 0 8px; }
+  .lead { color: var(--slate); margin: 0 0 24px; }
+  .check { background: var(--card); border-radius: 18px; padding: 18px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(14,28,43,.06), 0 6px 20px rgba(14,28,43,.06); }
+  .check h2 { font-size: 1rem; font-weight: 700; margin: 0 0 8px; color: var(--slate); }
+  .verdict { display: flex; align-items: flex-start; gap: 12px; font-weight: 800; font-size: 1.2rem; }
+  .dot { width: 14px; height: 14px; margin-top: .42em; border-radius: 50%; flex: none; background: var(--line); }
+  .ok .dot { background: var(--green); } .bad .dot { background: var(--coral-t); } .warn .dot { background: #F2A516; }
+  .ok .verdict { color: var(--green); } .bad .verdict { color: var(--coral-t); } .warn .verdict { color: var(--amber-t); }
+  .check p { margin: 8px 0 0; }
+  .lane { position: relative; height: 44px; margin-top: 12px; border-radius: 12px; background: var(--paper); overflow: hidden; }
+  .lane span { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 8px; background: var(--mint); animation: run 1.6s ease-in-out infinite alternate; }
+  @keyframes run { to { transform: translateX(calc(min(560px, 100vw) - 116px)); } }
+  ol { margin: 8px 0 0; padding-left: 22px; } li { margin: 4px 0; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; margin-top: 12px; border-radius: 999px; border: 0; font: 700 1rem/1 "Figtree", Arial, sans-serif; cursor: pointer; text-decoration: none; transition: transform .2s; }
+  .btn:active { transform: scale(.97); }
+  .btn--dark { background: var(--ink); color: #fff; } .btn--green { background: var(--green); color: #fff; }
+  .btn[hidden] { display: none; }
+  .back { margin-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="./"><i aria-hidden="true"></i>Easykeeps</a>
+  <h1>Motion check</h1>
+  <p class="lead">This page checks if your phone is telling websites to switch off moving parts.</p>
+
+  <section class="check" id="c-reduce" aria-live="polite">
+    <h2>1. Your phone's Reduce Motion setting</h2>
+    <div class="verdict"><span class="dot"></span><span data-v>Checking...</span></div>
+    <div data-help hidden>
+      <p>Most websites, including Easykeeps, stay still when this is on. To turn it off on an iPhone:</p>
+      <ol><li>Open <b>Settings</b></li><li>Tap <b>Accessibility</b></li><li>Tap <b>Motion</b></li><li>Turn off <b>Reduce Motion</b></li></ol>
+      <p>Then come back to this page. It updates by itself.</p>
+    </div>
+  </section>
+
+  <section class="check" id="c-site" aria-live="polite">
+    <h2>2. Easykeeps "Stop moving parts" option</h2>
+    <div class="verdict"><span class="dot"></span><span data-v>Checking...</span></div>
+    <p data-note></p>
+    <button class="btn btn--dark" type="button" data-clear hidden>Turn it off</button>
+  </section>
+
+  <section class="check" id="c-speed" aria-live="polite">
+    <h2>3. Animation speed (Low Power Mode slows it down)</h2>
+    <div class="lane" aria-hidden="true"><span></span></div>
+    <div class="verdict" style="margin-top:12px"><span class="dot"></span><span data-v>Measuring...</span></div>
+    <p data-note></p>
+  </section>
+
+  <a class="btn btn--green back" href="./">Back to Easykeeps</a>
+</main>
+<script>
+(function () {
+  function set(id, cls, text, note) {
+    var el = document.getElementById(id);
+    el.className = "check " + cls;
+    el.querySelector("[data-v]").textContent = text;
+    var n = el.querySelector("[data-note]");
+    if (n && note !== undefined) n.textContent = note;
+    return el;
+  }
+  /* 1. Reduce Motion */
+  var mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+  function showReduce() {
+    var el = set("c-reduce", mq.matches ? "bad" : "ok", mq.matches ? "On. This is why things don't move." : "Off. Good, this isn't the cause.");
+    el.querySelector("[data-help]").hidden = !mq.matches;
+  }
+  showReduce();
+  if (mq.addEventListener) mq.addEventListener("change", showReduce); else if (mq.addListener) mq.addListener(showReduce);
+
+  /* 2. The site's own option, saved on this phone */
+  var clear = document.querySelector("[data-clear]");
+  function readOpts() { try { return JSON.parse(localStorage.getItem("ek-a11y") || "[]") || []; } catch (e) { return []; } }
+  function showSite() {
+    var on = readOpts().indexOf("still") !== -1;
+    set("c-site", on ? "bad" : "ok", on ? "On. Easykeeps is staying still for you." : "Off. Good, this isn't the cause.",
+      on ? "It was switched on from the round accessibility button at the bottom corner of the site, and this phone remembers it." : "");
+    clear.hidden = !on;
+  }
+  showSite();
+  clear.addEventListener("click", function () {
+    var opts = readOpts().filter(function (o) { return o !== "still"; });
+    try { localStorage.setItem("ek-a11y", JSON.stringify(opts)); } catch (e) {}
+    showSite();
+  });
+
+  /* 3. Frame rate over two seconds */
+  var frames = 0, t0 = 0;
+  function tick(t) {
+    if (!t0) t0 = t;
+    frames++;
+    if (t - t0 < 2000) { requestAnimationFrame(tick); return; }
+    var fps = Math.round(frames * 1000 / (t - t0));
+    if (fps >= 50) set("c-speed", "ok", "Full speed (" + fps + " frames a second).", "Good, this isn't the cause.");
+    else if (fps >= 24) set("c-speed", "warn", "Slowed down (" + fps + " frames a second).", "This usually means Low Power Mode is on (yellow battery icon). Motion still plays, just less smoothly.");
+    else set("c-speed", "bad", "Very slow (" + fps + " frames a second).", "Try turning off Low Power Mode, or closing other apps.");
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
