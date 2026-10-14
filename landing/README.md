@@ -65,3 +65,7 @@ The photo story uses stock photos, free under the Unsplash License (no attributi
 - Motion stops completely when the visitor's device asks for reduced motion, or when they pick "Stop moving parts" in the accessibility panel (bottom left). That panel also offers bigger text, stronger contrast, underlined links and more line spacing, and remembers the choice on that device.
 - "How it works" and the photo story pin to the screen while you scroll: the background stays put and the content changes.
 - Phone layouts: the hero, "How it works" (tabs on top, caption under the stage), the photo story and pricing (a plan picker showing one plan at a time) each have their own phone version.
+
+## Publishing changes
+
+`index.html` loads `styles.css?v=...` and `main.js?v=...`. Change the `v=` value whenever either file changes, so phones fetch the new version instead of an old saved copy.
