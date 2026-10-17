@@ -1,0 +1,22 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+
+# Dependencies and build output
+node_modules/
+_site/
+dist/
+
+# Local settings and secrets
+.env
+.env.*
+!.env.example
+
+# Test and tool output
+playwright-report/
+test-results/
+.playwright-cli/
